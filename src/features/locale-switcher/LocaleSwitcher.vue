@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import { LanguagesIcon } from '@lucide/vue';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { isLocale, rememberLocale, SUPPORTED_LOCALES } from '@/shared/i18n';
 
 const { t, locale } = useI18n();
@@ -20,7 +12,8 @@ const router = useRouter();
 const current = computed({
   get: () => locale.value,
   set: (next) => {
-    if (!isLocale(next)) return;
+    // ToggleGroup emits undefined when the active item is clicked again
+    if (!isLocale(next) || next === locale.value) return;
     rememberLocale(next);
     void router.push({
       name: route.name ?? 'home',
@@ -33,18 +26,22 @@ const current = computed({
 </script>
 
 <template>
-  <DropdownMenu>
-    <DropdownMenuTrigger as-child>
-      <Button variant="ghost" size="icon" :aria-label="t('locale.label')">
-        <LanguagesIcon />
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
-      <DropdownMenuRadioGroup v-model="current">
-        <DropdownMenuRadioItem v-for="code in SUPPORTED_LOCALES" :key="code" :value="code">
-          {{ t(`locale.${code}`) }}
-        </DropdownMenuRadioItem>
-      </DropdownMenuRadioGroup>
-    </DropdownMenuContent>
-  </DropdownMenu>
+  <ToggleGroup
+    v-model="current"
+    type="single"
+    size="sm"
+    :spacing="0.5"
+    :aria-label="t('locale.label')"
+    class="rounded-lg bg-muted p-1"
+  >
+    <ToggleGroupItem
+      v-for="code in SUPPORTED_LOCALES"
+      :key="code"
+      :value="code"
+      :aria-label="t(`locale.${code}`)"
+      class="h-7 rounded-sm px-2.5 text-xs text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
+    >
+      {{ code.toUpperCase() }}
+    </ToggleGroupItem>
+  </ToggleGroup>
 </template>

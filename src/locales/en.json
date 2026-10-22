@@ -2,6 +2,19 @@
   "app": {
     "name": "lolinder"
   },
+  "nav": {
+    "label": "Sections",
+    "stats": "Stats",
+    "builds": "Builds",
+    "duo": "Duo",
+    "flex": "Flex"
+  },
+  "search": {
+    "label": "Player search",
+    "placeholder": "Name#TAG or champion",
+    "open": "Open search",
+    "close": "Close search"
+  },
   "home": {
     "title": "Find a player",
     "subtitle": "Stats, builds and teammates for League of Legends",
@@ -16,11 +29,12 @@
     "title": "Page not found",
     "back": "Back to home"
   },
+  "placeholder": {
+    "title": "Coming soon",
+    "subtitle": "This section is under construction"
+  },
   "theme": {
-    "label": "Theme",
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "System"
+    "toggle": "Toggle theme"
   },
   "locale": {
     "label": "Language",

@@ -3,6 +3,8 @@ import DefaultLayout from '@/app/layouts/DefaultLayout.vue';
 import HomePage from '@/pages/HomePage.vue';
 import { isLocale, preferredLocale, SUPPORTED_LOCALES, setLocale } from '@/shared/i18n';
 
+const SectionPlaceholderPage = () => import('@/pages/SectionPlaceholderPage.vue');
+
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,6 +13,9 @@ export const router = createRouter({
       component: DefaultLayout,
       children: [
         { path: '', name: 'home', component: HomePage },
+        { path: 'builds', name: 'builds', component: SectionPlaceholderPage },
+        { path: 'duo', name: 'duo', component: SectionPlaceholderPage },
+        { path: 'flex', name: 'flex', component: SectionPlaceholderPage },
         {
           path: ':pathMatch(.*)*',
           name: 'not-found',

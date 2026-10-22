@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Toaster } from '@/components/ui/sonner';
-import { useTheme } from '@/features/theme-switcher';
+import { useTheme } from '@/features/theme-toggle';
 
-const { state: theme } = useTheme();
+const { theme } = useTheme();
 </script>
 
 <template>

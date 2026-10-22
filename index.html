@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>lolinder</title>
     <script>
-      // same storage key as THEME_STORAGE_KEY in src/features/theme-switcher/useTheme.ts
+      // same storage key as THEME_STORAGE_KEY in src/features/theme-toggle/useTheme.ts
       (() => {
         const mode = localStorage.getItem('lolinder-theme');
         const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
