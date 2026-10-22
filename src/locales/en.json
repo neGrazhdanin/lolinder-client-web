@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "lolinder"
+  },
+  "home": {
+    "title": "Find a player",
+    "subtitle": "Stats, builds and teammates for League of Legends",
+    "apiStatus": {
+      "text": "API: {status}",
+      "checking": "checking…",
+      "online": "online",
+      "offline": "unavailable"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to home"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "System"
+  },
+  "locale": {
+    "label": "Language",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "footer": {
+    "legal": "lolinder isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc."
+  },
+  "errors": {
+    "BAD_REQUEST": "Invalid request",
+    "VALIDATION_FAILED": "Check the entered data",
+    "UNAUTHORIZED": "Please sign in",
+    "FORBIDDEN": "Access denied",
+    "NOT_FOUND": "Not found",
+    "CONFLICT": "Already exists",
+    "PAYLOAD_TOO_LARGE": "Data is too large",
+    "RATE_LIMITED": "Too many requests, try again later",
+    "INTERNAL_ERROR": "Something went wrong",
+    "NETWORK": "No connection to the server"
+  }
+}
