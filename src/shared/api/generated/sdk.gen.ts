@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { HealthControllerCheckData, HealthControllerCheckErrors, HealthControllerCheckResponses } from './types.gen';
+import type { HealthControllerCheckData, HealthControllerCheckErrors, HealthControllerCheckResponses, PlayersControllerProfileData, PlayersControllerProfileErrors, PlayersControllerProfileResponses, PlayersControllerRankHistoryData, PlayersControllerRankHistoryErrors, PlayersControllerRankHistoryResponses, PlayersControllerRefreshData, PlayersControllerRefreshErrors, PlayersControllerRefreshResponses, PlayersControllerSearchData, PlayersControllerSearchErrors, PlayersControllerSearchResponses, StaticDataControllerBundleData, StaticDataControllerBundleErrors, StaticDataControllerBundleResponses, StaticDataControllerLatestData, StaticDataControllerLatestErrors, StaticDataControllerLatestResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -19,3 +19,15 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 export const healthControllerCheck = <ThrowOnError extends boolean = false>(options?: Options<HealthControllerCheckData, ThrowOnError>): RequestResult<HealthControllerCheckResponses, HealthControllerCheckErrors, ThrowOnError> => (options?.client ?? client).get<HealthControllerCheckResponses, HealthControllerCheckErrors, ThrowOnError>({ url: '/health', ...options });
+
+export const staticDataControllerLatest = <ThrowOnError extends boolean = false>(options?: Options<StaticDataControllerLatestData, ThrowOnError>): RequestResult<StaticDataControllerLatestResponses, StaticDataControllerLatestErrors, ThrowOnError> => (options?.client ?? client).get<StaticDataControllerLatestResponses, StaticDataControllerLatestErrors, ThrowOnError>({ url: '/static-data/latest', ...options });
+
+export const staticDataControllerBundle = <ThrowOnError extends boolean = false>(options: Options<StaticDataControllerBundleData, ThrowOnError>): RequestResult<StaticDataControllerBundleResponses, StaticDataControllerBundleErrors, ThrowOnError> => (options.client ?? client).get<StaticDataControllerBundleResponses, StaticDataControllerBundleErrors, ThrowOnError>({ url: '/static-data/{version}/{locale}', ...options });
+
+export const playersControllerSearch = <ThrowOnError extends boolean = false>(options: Options<PlayersControllerSearchData, ThrowOnError>): RequestResult<PlayersControllerSearchResponses, PlayersControllerSearchErrors, ThrowOnError> => (options.client ?? client).get<PlayersControllerSearchResponses, PlayersControllerSearchErrors, ThrowOnError>({ url: '/players/search', ...options });
+
+export const playersControllerProfile = <ThrowOnError extends boolean = false>(options: Options<PlayersControllerProfileData, ThrowOnError>): RequestResult<PlayersControllerProfileResponses, PlayersControllerProfileErrors, ThrowOnError> => (options.client ?? client).get<PlayersControllerProfileResponses, PlayersControllerProfileErrors, ThrowOnError>({ url: '/players/{puuid}', ...options });
+
+export const playersControllerRankHistory = <ThrowOnError extends boolean = false>(options: Options<PlayersControllerRankHistoryData, ThrowOnError>): RequestResult<PlayersControllerRankHistoryResponses, PlayersControllerRankHistoryErrors, ThrowOnError> => (options.client ?? client).get<PlayersControllerRankHistoryResponses, PlayersControllerRankHistoryErrors, ThrowOnError>({ url: '/players/{puuid}/rank-history', ...options });
+
+export const playersControllerRefresh = <ThrowOnError extends boolean = false>(options: Options<PlayersControllerRefreshData, ThrowOnError>): RequestResult<PlayersControllerRefreshResponses, PlayersControllerRefreshErrors, ThrowOnError> => (options.client ?? client).post<PlayersControllerRefreshResponses, PlayersControllerRefreshErrors, ThrowOnError>({ url: '/players/{puuid}/refresh', ...options });

@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import { SearchIcon, XIcon } from '@lucide/vue';
-import { ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import AppLogo from '@/components/AppLogo.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { LocaleSwitcher } from '@/features/locale-switcher';
+import { PlayerSearchForm } from '@/features/player-search';
 import { ThemeToggle } from '@/features/theme-toggle';
-import { SECTIONS } from './sections';
+import { SECTIONS, useCurrentSection } from './sections';
 
 const { t, locale } = useI18n();
 const route = useRoute();
+const currentSection = useCurrentSection();
 
+// the home page is the search itself
+const showSearch = computed(() => route.name !== 'home');
 const searchOpen = ref(false);
 watch(
   () => route.fullPath,
   () => (searchOpen.value = false),
 );
+
+const searchToggle = ref<InstanceType<typeof Button>>();
+async function closeSearch(): Promise<void> {
+  searchOpen.value = false;
+  await nextTick();
+  (searchToggle.value?.$el as HTMLElement | undefined)?.focus();
+}
 </script>
 
 <template>
@@ -36,22 +46,20 @@ watch(
           v-for="section in SECTIONS"
           :key="section.route"
           :to="{ name: section.route, params: { locale } }"
+          :aria-current="currentSection === section.route ? 'page' : undefined"
           class="rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
         >
           {{ t(section.label) }}
         </RouterLink>
       </nav>
 
-      <Input
-        type="search"
-        disabled
-        :placeholder="t('search.placeholder')"
-        :aria-label="t('search.label')"
-        class="hidden flex-1 sm:block"
-      />
+      <PlayerSearchForm v-if="showSearch" variant="compact" class="hidden flex-1 sm:block" />
+      <div v-else class="hidden flex-1 sm:block" />
 
       <div class="ml-auto flex items-center gap-2 sm:ml-0 sm:gap-3">
         <Button
+          v-if="showSearch"
+          ref="searchToggle"
           variant="outline"
           size="icon"
           class="sm:hidden"
@@ -68,13 +76,13 @@ watch(
       </div>
     </div>
 
-    <div v-if="searchOpen" id="mobile-search" class="border-t px-4 py-2 sm:hidden">
-      <Input
-        type="search"
-        disabled
-        :placeholder="t('search.placeholder')"
-        :aria-label="t('search.label')"
-      />
+    <div
+      v-if="showSearch && searchOpen"
+      id="mobile-search"
+      class="border-t px-4 py-2 sm:hidden"
+      @keydown.esc="closeSearch"
+    >
+      <PlayerSearchForm variant="compact" autofocus />
     </div>
   </header>
 </template>

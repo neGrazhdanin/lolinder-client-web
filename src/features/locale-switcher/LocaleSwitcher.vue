@@ -39,7 +39,7 @@ const current = computed({
       :key="code"
       :value="code"
       :aria-label="t(`locale.${code}`)"
-      class="h-7 rounded-sm px-2.5 text-xs text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
+      class="h-9 rounded-sm px-3 text-xs text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm sm:h-7 sm:px-2.5"
     >
       {{ code.toUpperCase() }}
     </ToggleGroupItem>
