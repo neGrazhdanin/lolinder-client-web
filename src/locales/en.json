@@ -11,19 +11,133 @@
   },
   "search": {
     "label": "Player search",
-    "placeholder": "Name#TAG or champion",
+    "placeholder": "Name#TAG",
     "open": "Open search",
-    "close": "Close search"
+    "close": "Close search",
+    "riotId": "Riot ID",
+    "region": "Region",
+    "submit": "Search",
+    "hint": "Name and tag as shown in the League client, separated by #",
+    "errors": {
+      "empty": "Enter a Riot ID, like Name#TAG",
+      "missingTag": "Add the tag after #, like Name#EUW",
+      "invalidName": "The name before # must be 1 to 16 characters",
+      "invalidTag": "The tag after # is up to 5 letters or digits"
+    },
+    "recent": {
+      "title": "Recently viewed",
+      "remove": "Remove {riotId} from recently viewed"
+    }
   },
   "home": {
     "title": "Find a player",
-    "subtitle": "Stats, builds and teammates for League of Legends",
-    "apiStatus": {
-      "text": "API: {status}",
-      "checking": "checking…",
-      "online": "online",
-      "offline": "unavailable"
+    "subtitle": "Ranks, LP history and most-played champions for any League of Legends account."
+  },
+  "player": {
+    "documentTitle": "{riotId} · lolinder",
+    "level": "Level {level}",
+    "lookingUp": "Looking up {riotId} on {region}",
+    "stillLooking": "Riot is taking a while to answer. Still looking…",
+    "sync": {
+      "updated": "Updated {time}",
+      "never": "Not loaded from Riot yet",
+      "syncing": "Updating from Riot",
+      "firstSync": "Loading from Riot",
+      "done": "Profile updated"
+    },
+    "refresh": {
+      "label": "Refresh",
+      "busy": "Updating",
+      "upToDate": "Already up to date",
+      "failed": "Couldn't start the update"
+    },
+    "notFound": {
+      "title": "No player {riotId} on {region}",
+      "invalidTitle": "This link doesn't contain a Riot ID",
+      "description": "Check the name and the tag, or look in another region.",
+      "otherRegions": "Try another region"
+    },
+    "error": {
+      "title": "Couldn't load this profile",
+      "retry": "Try again",
+      "sections": "Couldn't load ranks and champions"
+    },
+    "queues": {
+      "solo": "Ranked Solo/Duo",
+      "flex": "Ranked Flex"
+    },
+    "queuesShort": {
+      "solo": "Solo/Duo",
+      "flex": "Flex"
+    },
+    "tiers": {
+      "IRON": "Iron",
+      "BRONZE": "Bronze",
+      "SILVER": "Silver",
+      "GOLD": "Gold",
+      "PLATINUM": "Platinum",
+      "EMERALD": "Emerald",
+      "DIAMOND": "Diamond",
+      "MASTER": "Master",
+      "GRANDMASTER": "Grandmaster",
+      "CHALLENGER": "Challenger"
+    },
+    "rank": {
+      "name": "{tier} {division}",
+      "lp": "LP",
+      "wins": "Wins",
+      "losses": "Losses",
+      "winRate": "Win rate",
+      "nextStep": "{lp} LP to {rank}",
+      "progress": "{lp} of 100 LP",
+      "unranked": "Unranked",
+      "unrankedHint": "No ranked games in this queue this season",
+      "loading": "Placing on the ladder…",
+      "unrankedEverywhere": "No ranked games this season"
+    },
+    "mastery": {
+      "title": "Top champions",
+      "subtitle": "By mastery points",
+      "level": "Mastery {level}",
+      "points": "Mastery points",
+      "lastPlayed": "Played {time}",
+      "empty": "No champion mastery yet",
+      "emptyHint": "Mastery shows up after the first games on a champion.",
+      "unknownChampion": "Champion #{id}"
+    },
+    "lp": {
+      "title": "LP history",
+      "queue": "Queue",
+      "empty": "No LP history yet",
+      "emptyHint": "A point is saved every time the rank changes. Check back after a few games.",
+      "unranked": "Play ranked games in this queue to start the graph.",
+      "change": "{change} LP",
+      "since": "since {date}",
+      "table": "LP history, {queue}",
+      "date": "Date",
+      "rank": "Rank",
+      "chart": "LP graph, {queue}",
+      "tracking": "Tracking since {date}. The line moves with the next LP change.",
+      "keyboardHint": "Arrow keys move between points.",
+      "pointAnnouncement": "{date}: {rank}, {lp} LP"
     }
+  },
+  "platforms": {
+    "br1": "Brazil",
+    "eun1": "Europe Nordic & East",
+    "euw1": "Europe West",
+    "jp1": "Japan",
+    "kr": "Korea",
+    "la1": "Latin America North",
+    "la2": "Latin America South",
+    "me1": "Middle East",
+    "na1": "North America",
+    "oc1": "Oceania",
+    "ru": "Russia",
+    "sg2": "Southeast Asia",
+    "tr1": "Türkiye",
+    "tw2": "Taiwan",
+    "vn2": "Vietnam"
   },
   "notFound": {
     "title": "Page not found",
@@ -54,6 +168,8 @@
     "PAYLOAD_TOO_LARGE": "Data is too large",
     "RATE_LIMITED": "Too many requests, try again later",
     "INTERNAL_ERROR": "Something went wrong",
-    "NETWORK": "No connection to the server"
+    "NETWORK": "No connection to the server",
+    "PLAYER_NOT_FOUND": "Player not found",
+    "SERVICE_UNAVAILABLE": "The service is temporarily unavailable, try again in a minute"
   }
 }

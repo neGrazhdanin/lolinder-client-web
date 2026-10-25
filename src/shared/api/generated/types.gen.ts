@@ -15,13 +15,153 @@ export const ErrorCode = {
     UNAUTHORIZED: 'UNAUTHORIZED',
     FORBIDDEN: 'FORBIDDEN',
     NOT_FOUND: 'NOT_FOUND',
+    PLAYER_NOT_FOUND: 'PLAYER_NOT_FOUND',
     CONFLICT: 'CONFLICT',
     PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
     RATE_LIMITED: 'RATE_LIMITED',
-    INTERNAL_ERROR: 'INTERNAL_ERROR'
+    INTERNAL_ERROR: 'INTERNAL_ERROR',
+    SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE'
 } as const;
 
 export type ErrorCode = typeof ErrorCode[keyof typeof ErrorCode];
+
+export type StaticDataVersion = {
+    version: string;
+};
+
+export const StaticLocale = { EN: 'en', RU: 'ru' } as const;
+
+export type StaticLocale = typeof StaticLocale[keyof typeof StaticLocale];
+
+export type StaticDataBundle = {
+    champions: Array<Champion>;
+    items: Array<Item>;
+    runeTrees: Array<RuneTree>;
+    summonerSpells: Array<SummonerSpell>;
+    version: string;
+    locale: StaticLocale;
+};
+
+export type Champion = {
+    id: number;
+    key: string;
+    name: string;
+    title: string;
+    image: string;
+};
+
+export type Item = {
+    id: number;
+    name: string;
+    plaintext: string;
+    gold: number;
+    image: string;
+    tags: Array<string>;
+    from: Array<number>;
+    into: Array<number>;
+};
+
+export type RuneTree = {
+    id: number;
+    key: string;
+    name: string;
+    icon: string;
+    slots: Array<Array<Rune>>;
+};
+
+export type Rune = {
+    id: number;
+    key: string;
+    name: string;
+    icon: string;
+};
+
+export type SummonerSpell = {
+    id: number;
+    key: string;
+    name: string;
+    image: string;
+};
+
+export const Platform = {
+    BR1: 'br1',
+    EUN1: 'eun1',
+    EUW1: 'euw1',
+    JP1: 'jp1',
+    KR: 'kr',
+    LA1: 'la1',
+    LA2: 'la2',
+    ME1: 'me1',
+    NA1: 'na1',
+    OC1: 'oc1',
+    RU: 'ru',
+    SG2: 'sg2',
+    TR1: 'tr1',
+    TW2: 'tw2',
+    VN2: 'vn2'
+} as const;
+
+export type Platform = typeof Platform[keyof typeof Platform];
+
+export type Player = {
+    puuid: string;
+    gameName: string;
+    tagLine: string;
+    platform: Platform;
+    profileIconId: number | null;
+    summonerLevel: number | null;
+    sync: PlayerSync;
+};
+
+export type PlayerSync = {
+    status: 'fresh' | 'syncing' | 'stale';
+    lastSyncedAt: string | null;
+};
+
+export type PlayerSearchPending = {
+    status: 'pending';
+};
+
+export type PlayerProfile = {
+    puuid: string;
+    gameName: string;
+    tagLine: string;
+    platform: Platform;
+    profileIconId: number | null;
+    summonerLevel: number | null;
+    sync: PlayerSync;
+    ranks: Array<PlayerRank>;
+    topMasteries: Array<ChampionMastery>;
+};
+
+export type PlayerRank = {
+    queue: 'solo' | 'flex';
+    tier: 'IRON' | 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER' | 'GRANDMASTER' | 'CHALLENGER';
+    division: 'I' | 'II' | 'III' | 'IV';
+    leaguePoints: number;
+    wins: number;
+    losses: number;
+};
+
+export type ChampionMastery = {
+    championId: number;
+    level: number;
+    points: number;
+    lastPlayedAt: string;
+};
+
+export type RankHistory = {
+    items: Array<RankHistoryPoint>;
+};
+
+export type RankHistoryPoint = {
+    tier: 'IRON' | 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER' | 'GRANDMASTER' | 'CHALLENGER';
+    division: 'I' | 'II' | 'III' | 'IV';
+    leaguePoints: number;
+    wins: number;
+    losses: number;
+    takenAt: string;
+};
 
 export type HealthControllerCheckData = {
     body?: never;
@@ -46,3 +186,178 @@ export type HealthControllerCheckError = HealthControllerCheckErrors[keyof Healt
 export type HealthControllerCheckResponses = {
     200: unknown;
 };
+
+export type StaticDataControllerLatestData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/static-data/latest';
+};
+
+export type StaticDataControllerLatestErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type StaticDataControllerLatestError = StaticDataControllerLatestErrors[keyof StaticDataControllerLatestErrors];
+
+export type StaticDataControllerLatestResponses = {
+    200: StaticDataVersion;
+};
+
+export type StaticDataControllerLatestResponse = StaticDataControllerLatestResponses[keyof StaticDataControllerLatestResponses];
+
+export type StaticDataControllerBundleData = {
+    body?: never;
+    path: {
+        version: string;
+        locale: 'en' | 'ru';
+    };
+    query?: never;
+    url: '/static-data/{version}/{locale}';
+};
+
+export type StaticDataControllerBundleErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type StaticDataControllerBundleError = StaticDataControllerBundleErrors[keyof StaticDataControllerBundleErrors];
+
+export type StaticDataControllerBundleResponses = {
+    200: StaticDataBundle;
+};
+
+export type StaticDataControllerBundleResponse = StaticDataControllerBundleResponses[keyof StaticDataControllerBundleResponses];
+
+export type PlayersControllerSearchData = {
+    body?: never;
+    path?: never;
+    query: {
+        platform: Platform;
+        gameName: string;
+        tagLine: string;
+    };
+    url: '/players/search';
+};
+
+export type PlayersControllerSearchErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type PlayersControllerSearchError = PlayersControllerSearchErrors[keyof PlayersControllerSearchErrors];
+
+export type PlayersControllerSearchResponses = {
+    200: Player;
+    /**
+     * Lookup still running: repeat the request after Retry-After seconds
+     */
+    202: PlayerSearchPending;
+};
+
+export type PlayersControllerSearchResponse = PlayersControllerSearchResponses[keyof PlayersControllerSearchResponses];
+
+export type PlayersControllerProfileData = {
+    body?: never;
+    path: {
+        puuid: string;
+    };
+    query?: never;
+    url: '/players/{puuid}';
+};
+
+export type PlayersControllerProfileErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type PlayersControllerProfileError = PlayersControllerProfileErrors[keyof PlayersControllerProfileErrors];
+
+export type PlayersControllerProfileResponses = {
+    200: PlayerProfile;
+};
+
+export type PlayersControllerProfileResponse = PlayersControllerProfileResponses[keyof PlayersControllerProfileResponses];
+
+export type PlayersControllerRankHistoryData = {
+    body?: never;
+    path: {
+        puuid: string;
+    };
+    query?: {
+        queue?: 'solo' | 'flex';
+    };
+    url: '/players/{puuid}/rank-history';
+};
+
+export type PlayersControllerRankHistoryErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type PlayersControllerRankHistoryError = PlayersControllerRankHistoryErrors[keyof PlayersControllerRankHistoryErrors];
+
+export type PlayersControllerRankHistoryResponses = {
+    200: RankHistory;
+};
+
+export type PlayersControllerRankHistoryResponse = PlayersControllerRankHistoryResponses[keyof PlayersControllerRankHistoryResponses];
+
+export type PlayersControllerRefreshData = {
+    body?: never;
+    path: {
+        puuid: string;
+    };
+    query?: never;
+    url: '/players/{puuid}/refresh';
+};
+
+export type PlayersControllerRefreshErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type PlayersControllerRefreshError = PlayersControllerRefreshErrors[keyof PlayersControllerRefreshErrors];
+
+export type PlayersControllerRefreshResponses = {
+    200: PlayerProfile;
+};
+
+export type PlayersControllerRefreshResponse = PlayersControllerRefreshResponses[keyof PlayersControllerRefreshResponses];

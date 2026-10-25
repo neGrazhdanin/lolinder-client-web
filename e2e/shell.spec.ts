@@ -102,7 +102,8 @@ test.describe('mobile', () => {
   });
 
   test('search opens from the header', async ({ page }) => {
-    await page.goto('/en');
+    // the home page has its own search, so the header one starts on other pages
+    await page.goto('/en/builds');
     await expect(page.getByRole('searchbox', { name: 'Player search' })).toBeHidden();
 
     await page.getByRole('button', { name: 'Open search' }).click();
