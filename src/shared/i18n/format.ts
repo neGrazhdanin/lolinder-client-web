@@ -34,18 +34,18 @@ export function formatRelativeTime(
   style: RelativeStyle = 'long',
 ): string {
   const seconds = (date.getTime() - now.getTime()) / 1000;
-  const options = { numeric: 'auto', style } as const;
-  const format = cached(
-    'relative',
-    locale,
-    options,
-    () => new Intl.RelativeTimeFormat(locale, options),
-  );
+  const formatter = (numeric: Intl.RelativeTimeFormatNumeric) => {
+    const options = { numeric, style };
+    return cached('relative', locale, options, () => new Intl.RelativeTimeFormat(locale, options));
+  };
+  // 'always': "auto" phrases like «на прошлой нед.» are longer and wrap in narrow columns
   for (const [unit, size] of RELATIVE_UNITS) {
-    if (Math.abs(seconds) >= size) return format.format(Math.round(seconds / size), unit);
+    if (Math.abs(seconds) >= size) {
+      return formatter('always').format(Math.round(seconds / size), unit);
+    }
   }
   // under a minute, "now" reads better than a ticking seconds counter
-  return format.format(0, 'second');
+  return formatter('auto').format(0, 'second');
 }
 
 export type OrdinalForm = 'one' | 'two' | 'few' | 'other';
