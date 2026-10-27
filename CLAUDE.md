@@ -27,6 +27,8 @@ Tasks live in GitHub Issues of this repo; backend epics are in `lolinder-api` #1
   `no-raw-text` is an ESLint error. Dates, numbers and plurals are formatted with `Intl` per locale.
 - Colors only via shadcn CSS variables (`--background`, `--card`, `--muted`, `--win`, `--loss`, …), so both
   themes work; text contrast stays ≥ 4.5:1. Charts take colors from the same variables.
+- The palette is generated from one seed by `pnpm palette` (`scripts/palette/`) into the marked block of
+  `src/styles/main.css`; never hand-edit that block. `pnpm palette:check` fails on any pair below the contrast rule.
 - `src/components/ui/` is shadcn-vue output: add components with the shadcn-vue CLI, never hand-write them.
 - Champion, item and rune names and icons come from Data Dragon by the current patch and locale;
   the API only sends IDs.

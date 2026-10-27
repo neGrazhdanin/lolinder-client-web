@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import TierCrest from '@/components/TierCrest.vue';
+import DancingPoro from '@/components/DancingPoro.vue';
 import { PlayerSearchForm, RecentPlayers } from '@/features/player-search';
-import { TIERS } from '@/shared/riot';
 
 const { t } = useI18n();
-
-const ladder = [...TIERS].reverse();
-const lastStep = ladder.length - 1;
 </script>
 
 <template>
@@ -27,25 +23,8 @@ const lastStep = ladder.length - 1;
       <RecentPlayers class="animate-rise [animation-delay:120ms]" />
     </div>
 
-    <ol class="hidden flex-col gap-1.5 self-start lg:flex" aria-hidden="true">
-      <li
-        v-for="(tier, index) in ladder"
-        :key="tier"
-        class="ladder-step flex items-center gap-3"
-        :style="{ '--step': lastStep - index, paddingLeft: `${(lastStep - index) * 0.9}rem` }"
-      >
-        <TierCrest :tier="tier" :reveal="false" class="size-7" />
-        <span class="font-mono text-[11px] tracking-wide text-muted-foreground uppercase">
-          {{ t(`player.tiers.${tier}`) }}
-        </span>
-      </li>
-    </ol>
+    <div class="hidden animate-rise justify-center self-start [animation-delay:200ms] lg:flex">
+      <DancingPoro :label="t('home.petPoro')" />
+    </div>
   </div>
 </template>
-
-<style scoped>
-.ladder-step {
-  animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: calc(200ms + var(--step) * 45ms);
-}
-</style>

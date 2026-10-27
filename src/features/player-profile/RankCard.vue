@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import RankEmblem from '@/components/RankEmblem.vue';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { PlayerRank } from '@/shared/api';
 import { useFormat } from '@/shared/i18n/format';
@@ -23,7 +24,7 @@ const titleId = computed(() => `rank-${props.queue}`);
   <article
     :data-tier="rank?.tier ?? 'NONE'"
     :aria-labelledby="titleId"
-    class="flex flex-col rounded-xl border bg-card p-5 text-card-foreground"
+    class="flex flex-col rounded-xl bg-card p-5 text-card-foreground"
   >
     <h2 :id="titleId" class="text-sm font-medium text-muted-foreground">
       {{ t(`player.queues.${queue}`) }}
@@ -32,6 +33,7 @@ const titleId = computed(() => `rank-${props.queue}`);
     <template v-if="placeholder">
       <div class="mt-4 flex items-center gap-4">
         <span class="sr-only" role="status">{{ t('player.rank.loading') }}</span>
+        <Skeleton class="size-12 animate-shimmer rounded-full skeleton-shimmer" />
         <div class="flex flex-1 flex-col gap-2">
           <Skeleton class="h-5 w-32 animate-shimmer skeleton-shimmer" />
           <Skeleton class="h-3.5 w-20 animate-shimmer skeleton-shimmer" />
@@ -41,6 +43,7 @@ const titleId = computed(() => `rank-${props.queue}`);
 
     <template v-else-if="rank">
       <div class="mt-4 flex items-center gap-4">
+        <RankEmblem :tier="rank.tier" class="size-12" />
         <div class="flex min-w-0 flex-1 flex-col gap-0.5">
           <p class="truncate text-lg leading-tight font-semibold tracking-tight text-tier-ink">
             {{ rankName(rank.tier, rank.division) }}
@@ -106,6 +109,7 @@ const titleId = computed(() => `rank-${props.queue}`);
     </template>
 
     <div v-else class="mt-4 flex items-center gap-4">
+      <RankEmblem class="size-12" />
       <div class="flex flex-col gap-0.5">
         <p class="text-lg leading-tight font-semibold tracking-tight">
           {{ t('player.rank.unranked') }}

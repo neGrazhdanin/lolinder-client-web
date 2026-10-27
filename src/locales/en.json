@@ -31,7 +31,8 @@
   },
   "home": {
     "title": "Find a player",
-    "subtitle": "Ranks, LP history and most-played champions for any League of Legends account."
+    "subtitle": "Ranks, LP history and most-played champions for any League of Legends account.",
+    "petPoro": "Pet the poro"
   },
   "player": {
     "documentTitle": "{riotId} · lolinder",
@@ -151,6 +152,12 @@
         "spellbook": "Ultimate Spellbook",
         "custom": "Custom game",
         "other": "Special mode"
+      },
+      "queuesShort": {
+        "solo": "Solo/Duo",
+        "flex": "Flex",
+        "blind": "Blind Pick",
+        "custom": "Custom"
       },
       "result": {
         "win": "Victory",

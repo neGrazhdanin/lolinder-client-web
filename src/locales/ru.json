@@ -31,7 +31,8 @@
   },
   "home": {
     "title": "Найти игрока",
-    "subtitle": "Ранги, история LP и любимые чемпионы любого аккаунта League of Legends."
+    "subtitle": "Ранги, история LP и любимые чемпионы любого аккаунта League of Legends.",
+    "petPoro": "Погладить поро"
   },
   "player": {
     "documentTitle": "{riotId} · lolinder",
@@ -151,6 +152,12 @@
         "spellbook": "Книга заклинаний",
         "custom": "Пользовательская игра",
         "other": "Особый режим"
+      },
+      "queuesShort": {
+        "solo": "Соло/Дуо",
+        "flex": "Флекс",
+        "blind": "Вслепую",
+        "custom": "Своя игра"
       },
       "result": {
         "win": "Победа",

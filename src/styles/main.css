@@ -2,30 +2,6 @@
 @import 'tw-animate-css';
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/geist-mono';
-@import '@radix-ui/colors/amber.css';
-@import '@radix-ui/colors/amber-dark.css';
-@import '@radix-ui/colors/blue.css';
-@import '@radix-ui/colors/blue-dark.css';
-@import '@radix-ui/colors/red.css';
-@import '@radix-ui/colors/red-dark.css';
-@import '@radix-ui/colors/bronze.css';
-@import '@radix-ui/colors/bronze-dark.css';
-@import '@radix-ui/colors/crimson.css';
-@import '@radix-ui/colors/crimson-dark.css';
-@import '@radix-ui/colors/grass.css';
-@import '@radix-ui/colors/grass-dark.css';
-@import '@radix-ui/colors/iris.css';
-@import '@radix-ui/colors/iris-dark.css';
-@import '@radix-ui/colors/purple.css';
-@import '@radix-ui/colors/purple-dark.css';
-@import '@radix-ui/colors/sand.css';
-@import '@radix-ui/colors/sand-dark.css';
-@import '@radix-ui/colors/sky.css';
-@import '@radix-ui/colors/sky-dark.css';
-@import '@radix-ui/colors/slate.css';
-@import '@radix-ui/colors/slate-dark.css';
-@import '@radix-ui/colors/teal.css';
-@import '@radix-ui/colors/teal-dark.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -47,10 +23,11 @@
   --color-loss-muted: var(--loss-muted);
   --color-brand: var(--brand);
   --color-brand-muted: var(--brand-muted);
+  --color-brand-muted-foreground: var(--brand-muted-foreground);
   --color-tier-mark: var(--tier-mark);
   --color-tier-ink: var(--tier-ink);
   --color-tier-strong: var(--tier-strong);
-  --color-tier-wash: var(--tier-wash);
+  --color-tier-container: var(--tier-container);
   --color-tier-line: var(--tier-line);
   --animate-shimmer: shimmer 1.6s ease-in-out infinite;
   --animate-rise: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -93,202 +70,262 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  /* zinc default gives 4.4:1 on --muted */
-  --muted-foreground: #6b6b74;
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  /* Components draw the ring at 50% alpha; this keeps the result at 3:1 against the page. */
-  --ring: oklch(0.21 0.006 285.885);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.705 0.015 286.067);
-  /* text in --win/--loss passes 4.5:1 only on --background, --card and *-muted (step 2); step 3+ drops below it in light theme */
-  --win: var(--blue-11);
-  --win-muted: var(--blue-2);
-  --loss: var(--red-11);
-  --loss-muted: var(--red-2);
-  /* amber-11 is 4.25:1 on amber-3 in light theme, so text uses step 12 */
-  --brand: var(--amber-12);
-  --brand-muted: var(--amber-3);
-}
-
-.dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: #111113;
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.92 0.004 286.32);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
-  --brand: var(--amber-11);
+  --background: var(--md-surface);
+  --foreground: var(--md-on-surface);
+  --card: var(--md-surface-container);
+  --card-foreground: var(--md-on-surface);
+  --popover: var(--md-surface-container-high);
+  --popover-foreground: var(--md-on-surface);
+  --primary: var(--md-primary);
+  --primary-foreground: var(--md-on-primary);
+  --secondary: var(--md-secondary-container);
+  --secondary-foreground: var(--md-on-secondary-container);
+  --muted: var(--md-surface-container-highest);
+  --muted-foreground: var(--md-on-surface-variant);
+  --accent: var(--md-surface-container-highest);
+  --accent-foreground: var(--md-on-surface);
+  --destructive: var(--md-error);
+  --border: var(--md-outline-variant);
+  --input: var(--md-outline-variant);
+  --ring: var(--md-primary);
+  --chart-1: var(--md-primary);
+  --chart-2: var(--md-tertiary);
+  --chart-3: var(--md-secondary);
+  --chart-4: var(--md-primary-container);
+  --chart-5: var(--md-error);
+  --sidebar: var(--md-surface-container-low);
+  --sidebar-foreground: var(--md-on-surface);
+  --sidebar-primary: var(--md-primary);
+  --sidebar-primary-foreground: var(--md-on-primary);
+  --sidebar-accent: var(--md-surface-container-highest);
+  --sidebar-accent-foreground: var(--md-on-surface);
+  --sidebar-border: var(--md-outline-variant);
+  --sidebar-ring: var(--md-primary);
+  --brand: var(--md-primary);
+  --brand-muted: var(--md-primary-container);
+  --brand-muted-foreground: var(--md-on-primary-container);
 }
 
 /* Neutral tint for unranked; NONE resets it inside a tinted page. */
 :root,
 [data-tier='NONE'] {
-  --tier-mark: var(--muted-foreground);
-  --tier-mark-dark: var(--muted-foreground);
-  --tier-ink: var(--muted-foreground);
-  --tier-strong: var(--foreground);
-  --tier-wash: var(--muted);
-  --tier-line: var(--border);
+  --tier-mark: var(--md-on-surface-variant);
+  --tier-ink: var(--md-on-surface-variant);
+  --tier-strong: var(--md-on-surface);
+  --tier-container: var(--md-surface-container-high);
+  --tier-line: var(--md-outline-variant);
 }
 
-/*
- * Tier tints from Radix steps: ink (11) is text on --background/--card, strong (12) is text on wash (3).
- * Marks need 3:1 on the card: step 9 fails for amber and sky in light theme, so those use step 11.
- */
+/* palette:start: generated by `pnpm palette` from seed #fbaffe (Material 3 SchemeTonalSpot). Do not edit by hand. */
+:root {
+  --md-surface: #fff7fa;
+  --md-surface-container-low: #fcf0f7;
+  --md-surface-container: #f6ebf2;
+  --md-surface-container-high: #f0e5ec;
+  --md-surface-container-highest: #ebdfe6;
+  --md-on-surface: #1f1a1f;
+  --md-on-surface-variant: #4d444c;
+  --md-primary: #7c4e7f;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #ffd6fd;
+  --md-on-primary-container: #623765;
+  --md-secondary: #6c586b;
+  --md-secondary-container: #f5dbf1;
+  --md-on-secondary-container: #534152;
+  --md-tertiary: #82524a;
+  --md-outline-variant: #d0c3cc;
+  --md-error: #ba1a1a;
+  --win: #3f56ba;
+  --win-muted: #e5e6ff;
+  --loss: #b9114b;
+  --loss-muted: #ffe1e4;
+}
+
+.dark {
+  --md-surface: #171216;
+  --md-surface-container-low: #1f1a1f;
+  --md-surface-container: #231e23;
+  --md-surface-container-high: #2e282d;
+  --md-surface-container-highest: #393338;
+  --md-on-surface: #ebdfe6;
+  --md-on-surface-variant: #d0c3cc;
+  --md-primary: #ecb4ec;
+  --md-on-primary: #49204d;
+  --md-primary-container: #623765;
+  --md-on-primary-container: #ffd6fd;
+  --md-secondary: #d8bfd5;
+  --md-secondary-container: #534152;
+  --md-on-secondary-container: #f5dbf1;
+  --md-tertiary: #f6b8ad;
+  --md-outline-variant: #4d444c;
+  --md-error: #ffb4ab;
+  --win: #b9c3ff;
+  --win-muted: #272b40;
+  --loss: #ffb2bd;
+  --loss-muted: #402429;
+}
+
 [data-tier='IRON'] {
-  --tier-mark: var(--sand-9);
-  --tier-ink: var(--sand-11);
-  --tier-strong: var(--sand-12);
-  --tier-wash: var(--sand-3);
-  --tier-line: var(--sand-6);
+  --tier-mark: #7e7570;
+  --tier-ink: #655d58;
+  --tier-strong: #352f2b;
+  --tier-container: #f1e6df;
+  --tier-line: #cfc4be;
 }
+
+.dark [data-tier='IRON'] {
+  --tier-mark: #b3a9a3;
+  --tier-ink: #cfc4be;
+  --tier-strong: #ece0da;
+  --tier-container: #352f2b;
+  --tier-line: #655d58;
+}
+
 [data-tier='BRONZE'] {
-  --tier-mark: var(--bronze-9);
-  --tier-ink: var(--bronze-11);
-  --tier-strong: var(--bronze-12);
-  --tier-wash: var(--bronze-3);
-  --tier-line: var(--bronze-6);
+  --tier-mark: #a36948;
+  --tier-ink: #865132;
+  --tier-strong: #4f2508;
+  --tier-container: #ffe3d4;
+  --tier-line: #fcb790;
 }
+
+.dark [data-tier='BRONZE'] {
+  --tier-mark: #de9c77;
+  --tier-ink: #fcb790;
+  --tier-strong: #ffdbc9;
+  --tier-container: #412c1f;
+  --tier-line: #865132;
+}
+
 [data-tier='SILVER'] {
-  --tier-mark: var(--slate-9);
-  --tier-ink: var(--slate-11);
-  --tier-strong: var(--slate-12);
-  --tier-wash: var(--slate-3);
-  --tier-line: var(--slate-6);
+  --tier-mark: #74777c;
+  --tier-ink: #5b5f63;
+  --tier-strong: #2d3135;
+  --tier-container: #e6e8ee;
+  --tier-line: #c4c6cc;
 }
+
+.dark [data-tier='SILVER'] {
+  --tier-mark: #a8abb1;
+  --tier-ink: #c4c6cc;
+  --tier-strong: #e0e2e8;
+  --tier-container: #2d3135;
+  --tier-line: #5b5f63;
+}
+
 [data-tier='GOLD'] {
-  --tier-mark: var(--amber-11);
-  --tier-ink: var(--amber-11);
-  --tier-strong: var(--amber-12);
-  --tier-wash: var(--amber-3);
-  --tier-line: var(--amber-6);
+  --tier-mark: #947217;
+  --tier-ink: #785a00;
+  --tier-strong: #3f2e00;
+  --tier-container: #f8e6c5;
+  --tier-line: #ebc161;
 }
+
+.dark [data-tier='GOLD'] {
+  --tier-mark: #cda649;
+  --tier-ink: #ebc161;
+  --tier-strong: #ffdf9b;
+  --tier-container: #392f19;
+  --tier-line: #785a00;
+}
+
 [data-tier='PLATINUM'] {
-  --tier-mark: var(--teal-9);
-  --tier-ink: var(--teal-11);
-  --tier-strong: var(--teal-12);
-  --tier-wash: var(--teal-3);
-  --tier-line: var(--teal-6);
+  --tier-mark: #428278;
+  --tier-ink: #276860;
+  --tier-strong: #003731;
+  --tier-container: #d6ede8;
+  --tier-line: #93d3c8;
 }
+
+.dark [data-tier='PLATINUM'] {
+  --tier-mark: #77b7ac;
+  --tier-ink: #93d3c8;
+  --tier-strong: #aeefe4;
+  --tier-container: #203431;
+  --tier-line: #276860;
+}
+
 [data-tier='EMERALD'] {
-  --tier-mark: var(--grass-9);
-  --tier-ink: var(--grass-11);
-  --tier-strong: var(--grass-12);
-  --tier-wash: var(--grass-3);
-  --tier-line: var(--grass-6);
+  --tier-mark: #4b8358;
+  --tier-ink: #326941;
+  --tier-strong: #003918;
+  --tier-container: #dbedda;
+  --tier-line: #99d4a3;
 }
+
+.dark [data-tier='EMERALD'] {
+  --tier-mark: #7eb989;
+  --tier-ink: #99d4a3;
+  --tier-strong: #b4f1bd;
+  --tier-container: #253427;
+  --tier-line: #326941;
+}
+
 [data-tier='DIAMOND'] {
-  --tier-mark: var(--iris-9);
-  --tier-ink: var(--iris-11);
-  --tier-strong: var(--iris-12);
-  --tier-wash: var(--iris-3);
-  --tier-line: var(--iris-6);
+  --tier-mark: #6873b4;
+  --tier-ink: #4f5a9a;
+  --tier-strong: #202a68;
+  --tier-container: #e6e6fc;
+  --tier-line: #bbc3ff;
 }
+
+.dark [data-tier='DIAMOND'] {
+  --tier-mark: #9da7ec;
+  --tier-ink: #bbc3ff;
+  --tier-strong: #dee0ff;
+  --tier-container: #2d2f3f;
+  --tier-line: #4f5a9a;
+}
+
 [data-tier='MASTER'] {
-  --tier-mark: var(--purple-9);
-  --tier-ink: var(--purple-11);
-  --tier-strong: var(--purple-12);
-  --tier-wash: var(--purple-3);
-  --tier-line: var(--purple-6);
+  --tier-mark: #8f67a7;
+  --tier-ink: #754f8d;
+  --tier-strong: #44205b;
+  --tier-container: #f4e3f8;
+  --tier-line: #e3b6fc;
 }
+
+.dark [data-tier='MASTER'] {
+  --tier-mark: #c69bdf;
+  --tier-ink: #e3b6fc;
+  --tier-strong: #f4d9ff;
+  --tier-container: #372d3c;
+  --tier-line: #754f8d;
+}
+
 [data-tier='GRANDMASTER'] {
-  --tier-mark: var(--crimson-9);
-  --tier-ink: var(--crimson-11);
-  --tier-strong: var(--crimson-12);
-  --tier-wash: var(--crimson-3);
-  --tier-line: var(--crimson-6);
+  --tier-mark: #b65b63;
+  --tier-ink: #98444b;
+  --tier-strong: #5d1620;
+  --tier-container: #ffe1e2;
+  --tier-line: #ffb3b6;
 }
+
+.dark [data-tier='GRANDMASTER'] {
+  --tier-mark: #f58e94;
+  --tier-ink: #ffb3b6;
+  --tier-strong: #ffdada;
+  --tier-container: #422a2b;
+  --tier-line: #98444b;
+}
+
 [data-tier='CHALLENGER'] {
-  --tier-mark: var(--sky-11);
-  --tier-ink: var(--sky-11);
-  --tier-strong: var(--sky-12);
-  --tier-wash: var(--sky-3);
-  --tier-line: var(--sky-6);
+  --tier-mark: #467ca5;
+  --tier-ink: #2a638a;
+  --tier-strong: #003350;
+  --tier-container: #dceaf9;
+  --tier-line: #98ccf9;
 }
-.dark [data-tier] {
-  --tier-mark: var(--tier-mark-dark);
+
+.dark [data-tier='CHALLENGER'] {
+  --tier-mark: #7cb1dc;
+  --tier-ink: #98ccf9;
+  --tier-strong: #cbe6ff;
+  --tier-container: #25323d;
+  --tier-line: #2a638a;
 }
-[data-tier='IRON'] {
-  --tier-mark-dark: var(--sand-10);
-}
-[data-tier='BRONZE'] {
-  --tier-mark-dark: var(--bronze-10);
-}
-[data-tier='SILVER'] {
-  --tier-mark-dark: var(--slate-10);
-}
-[data-tier='GOLD'] {
-  --tier-mark-dark: var(--amber-10);
-}
-[data-tier='PLATINUM'] {
-  --tier-mark-dark: var(--teal-10);
-}
-[data-tier='EMERALD'] {
-  --tier-mark-dark: var(--grass-10);
-}
-[data-tier='DIAMOND'] {
-  --tier-mark-dark: var(--iris-10);
-}
-[data-tier='MASTER'] {
-  --tier-mark-dark: var(--purple-10);
-}
-[data-tier='GRANDMASTER'] {
-  --tier-mark-dark: var(--crimson-10);
-}
-[data-tier='CHALLENGER'] {
-  --tier-mark-dark: var(--sky-10);
-}
+
+/* palette:end */
 
 @keyframes shimmer {
   0% {
@@ -306,10 +343,10 @@
   }
 }
 
-@keyframes crest-core {
+@keyframes emblem-in {
   from {
     opacity: 0;
-    transform: scale(0.55);
+    transform: scale(0.8);
   }
 }
 
@@ -320,12 +357,6 @@
   }
   50% {
     transform: scaleY(1);
-  }
-}
-
-@keyframes line-draw {
-  from {
-    stroke-dashoffset: 1;
   }
 }
 

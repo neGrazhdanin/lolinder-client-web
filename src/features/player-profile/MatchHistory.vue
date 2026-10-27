@@ -113,7 +113,7 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
           v-for="option in ['all', ...MATCH_QUEUES] as const"
           :key="option"
           :value="option"
-          class="h-9 rounded-sm px-3 text-xs text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm sm:h-7 sm:px-2.5"
+          class="h-9 rounded-sm px-3 text-xs text-muted-foreground data-[state=on]:bg-brand-muted data-[state=on]:font-semibold data-[state=on]:text-brand-muted-foreground data-[state=on]:ring-1 data-[state=on]:ring-primary data-[state=on]:ring-inset sm:h-7 sm:px-2.5"
         >
           {{ t(`player.matches.filters.${option}`) }}
         </ToggleGroupItem>
@@ -135,7 +135,7 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
       <div
         v-for="row in 4"
         :key="row"
-        class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-xl border bg-card p-3 sm:grid-cols-[7.5rem_auto_minmax(0,1fr)_auto] sm:gap-5 sm:p-4"
+        class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-xl bg-card p-3 sm:grid-cols-[7.5rem_auto_minmax(0,1fr)_auto] sm:gap-5 sm:p-4"
         aria-hidden="true"
       >
         <div class="col-span-3 flex flex-col gap-1.5 sm:col-span-1">
@@ -165,7 +165,7 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
       heading="h3"
       :title="t('player.matches.error')"
       :description="t(errorMessageKey(error))"
-      class="rounded-xl border bg-card p-5"
+      class="rounded-xl bg-card p-5"
     >
       <template #icon><CloudOffIcon /></template>
       <Button variant="outline" @click="emit('retry')">{{ t('player.error.retry') }}</Button>
@@ -184,7 +184,7 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
               : 'player.matches.emptyHint',
         )
       "
-      class="rounded-xl border bg-card p-5"
+      class="rounded-xl bg-card p-5"
     >
       <template #icon><HistoryIcon /></template>
       <Button v-if="queue && !state.hasMore" variant="outline" @click="filter = 'all'">
