@@ -39,6 +39,7 @@ function fakeSocket() {
 
 const listener = () => ({
   onUpdated: vi.fn<() => void>(),
+  onMatchesUpdated: vi.fn<() => void>(),
   onJoined: vi.fn<(afterReconnect: boolean) => void>(),
 });
 
@@ -99,6 +100,21 @@ describe('createPlayerChannel', () => {
     expect(b.onUpdated).not.toHaveBeenCalled();
   });
 
+  it('routes player:matches-updated apart from profile updates', () => {
+    const fake = fakeSocket();
+    const channel = createPlayerChannel(fake.asPlayerSocket);
+    const a = listener();
+    const b = listener();
+    channel.subscribe('a', a);
+    channel.subscribe('b', b);
+    fake.serverConnects();
+
+    fake.serverEmits('player:matches-updated', { puuid: 'a' });
+    expect(a.onMatchesUpdated).toHaveBeenCalledOnce();
+    expect(a.onUpdated).not.toHaveBeenCalled();
+    expect(b.onMatchesUpdated).not.toHaveBeenCalled();
+  });
+
   it('rejoins rooms after a reconnect and flags that events were missed', () => {
     const fake = fakeSocket();
     const channel = createPlayerChannel(fake.asPlayerSocket);
@@ -129,7 +145,7 @@ describe('createPlayerChannel', () => {
     expect(fake.socket.connect).toHaveBeenCalledOnce();
   });
 
-  it('ignores a malformed player:updated payload', () => {
+  it('ignores malformed player event payloads', () => {
     const fake = fakeSocket();
     const channel = createPlayerChannel(fake.asPlayerSocket);
     const a = listener();
@@ -137,7 +153,9 @@ describe('createPlayerChannel', () => {
     fake.serverConnects();
 
     expect(() => fake.serverEmits('player:updated', null)).not.toThrow();
+    expect(() => fake.serverEmits('player:matches-updated', { puuid: 7 })).not.toThrow();
     expect(a.onUpdated).not.toHaveBeenCalled();
+    expect(a.onMatchesUpdated).not.toHaveBeenCalled();
   });
 
   it('does not emit an unsubscribe while offline', () => {

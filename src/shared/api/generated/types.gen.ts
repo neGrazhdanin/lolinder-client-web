@@ -16,6 +16,7 @@ export const ErrorCode = {
     FORBIDDEN: 'FORBIDDEN',
     NOT_FOUND: 'NOT_FOUND',
     PLAYER_NOT_FOUND: 'PLAYER_NOT_FOUND',
+    MATCH_NOT_FOUND: 'MATCH_NOT_FOUND',
     CONFLICT: 'CONFLICT',
     PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
     RATE_LIMITED: 'RATE_LIMITED',
@@ -161,6 +162,161 @@ export type RankHistoryPoint = {
     wins: number;
     losses: number;
     takenAt: string;
+};
+
+export type MatchHistoryPage = {
+    items: Array<MatchHistoryItem>;
+    /**
+     * Null at the end of the history, or while older matches load for this page
+     */
+    nextCursor: string | null;
+    /**
+     * The worker is fetching newer or older matches: refetch on player:matches-updated
+     */
+    loading: {
+        newest: boolean;
+        older: boolean;
+    };
+};
+
+export type MatchHistoryItem = {
+    matchId: string;
+    queueId: number;
+    patch: string;
+    startedAt: string;
+    durationSec: number;
+    /**
+     * Ended by an early surrender vote: no win or loss counts
+     */
+    remake: boolean;
+    teamId: number;
+    /**
+     * Arena duo, 1–8; null in team modes
+     */
+    subteamId: number | null;
+    /**
+     * Arena finish, 1–8; null in team modes
+     */
+    placement: number | null;
+    championId: number;
+    champLevel: number;
+    role: string | null;
+    kills: number;
+    deaths: number;
+    assists: number;
+    damageToChampions: number;
+    goldEarned: number;
+    cs: number;
+    visionScore: number;
+    /**
+     * item0 to item6: 0 is an empty slot, the last one is the trinket
+     */
+    items: [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number
+    ];
+    summonerSpells: [
+        number,
+        number
+    ];
+    runes: MatchRunes;
+    win: boolean;
+    participants: Array<MatchHistoryParticipant>;
+};
+
+export type MatchRunes = {
+    primaryStyle: number | null;
+    subStyle: number | null;
+    /**
+     * Primary tree selections, keystone first, then the secondary tree
+     */
+    perks: Array<number>;
+    /**
+     * Offense, flex and defense shards
+     */
+    statPerks: Array<number>;
+};
+
+export type MatchHistoryParticipant = {
+    puuid: string;
+    /**
+     * Riot ID at the time of the match; null for bots
+     */
+    gameName: string | null;
+    tagLine: string | null;
+    teamId: number;
+    /**
+     * Arena duo, 1–8; null in team modes
+     */
+    subteamId: number | null;
+    championId: number;
+};
+
+export type Match = {
+    matchId: string;
+    queueId: number;
+    patch: string;
+    startedAt: string;
+    durationSec: number;
+    /**
+     * Ended by an early surrender vote: no win or loss counts
+     */
+    remake: boolean;
+    platform: string;
+    winnerTeam: number | null;
+    participants: Array<MatchParticipant>;
+};
+
+export type MatchParticipant = {
+    teamId: number;
+    /**
+     * Arena duo, 1–8; null in team modes
+     */
+    subteamId: number | null;
+    /**
+     * Arena finish, 1–8; null in team modes
+     */
+    placement: number | null;
+    championId: number;
+    champLevel: number;
+    role: string | null;
+    kills: number;
+    deaths: number;
+    assists: number;
+    damageToChampions: number;
+    goldEarned: number;
+    cs: number;
+    visionScore: number;
+    /**
+     * item0 to item6: 0 is an empty slot, the last one is the trinket
+     */
+    items: [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        number
+    ];
+    summonerSpells: [
+        number,
+        number
+    ];
+    runes: MatchRunes;
+    win: boolean;
+    participantId: number;
+    puuid: string;
+    /**
+     * Riot ID at the time of the match; null for bots
+     */
+    gameName: string | null;
+    tagLine: string | null;
 };
 
 export type HealthControllerCheckData = {
@@ -361,3 +517,63 @@ export type PlayersControllerRefreshResponses = {
 };
 
 export type PlayersControllerRefreshResponse = PlayersControllerRefreshResponses[keyof PlayersControllerRefreshResponses];
+
+export type MatchesControllerHistoryData = {
+    body?: never;
+    path: {
+        puuid: string;
+    };
+    query?: {
+        cursor?: string;
+        queue?: 'solo' | 'flex' | 'normal' | 'aram' | 'arena';
+        limit?: number;
+    };
+    url: '/players/{puuid}/matches';
+};
+
+export type MatchesControllerHistoryErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type MatchesControllerHistoryError = MatchesControllerHistoryErrors[keyof MatchesControllerHistoryErrors];
+
+export type MatchesControllerHistoryResponses = {
+    200: MatchHistoryPage;
+};
+
+export type MatchesControllerHistoryResponse = MatchesControllerHistoryResponses[keyof MatchesControllerHistoryResponses];
+
+export type MatchesControllerMatchData = {
+    body?: never;
+    path: {
+        matchId: string;
+    };
+    query?: never;
+    url: '/matches/{matchId}';
+};
+
+export type MatchesControllerMatchErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type MatchesControllerMatchError = MatchesControllerMatchErrors[keyof MatchesControllerMatchErrors];
+
+export type MatchesControllerMatchResponses = {
+    200: Match;
+};
+
+export type MatchesControllerMatchResponse = MatchesControllerMatchResponses[keyof MatchesControllerMatchResponses];
