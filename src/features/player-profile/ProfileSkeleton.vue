@@ -26,7 +26,7 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-8">
       <div class="grid grid-cols-1 content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
-        <div v-for="card in 2" :key="card" class="rounded-xl border bg-card p-5">
+        <div v-for="card in 2" :key="card" class="rounded-xl bg-card p-5">
           <Skeleton :class="[shimmer, 'h-4 w-28']" />
           <div class="mt-4 flex items-center gap-4">
             <svg viewBox="0 0 48 48" class="size-14" aria-hidden="true">
@@ -52,14 +52,14 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
       </div>
 
       <div class="flex flex-col gap-6">
-        <div class="rounded-xl border bg-card p-5">
+        <div class="rounded-xl bg-card p-5">
           <div class="flex items-center justify-between">
             <Skeleton :class="[shimmer, 'h-5 w-28']" />
             <Skeleton :class="[shimmer, 'h-8 w-36 rounded-lg']" />
           </div>
           <Skeleton :class="[shimmer, 'mt-5 h-48 w-full rounded-lg sm:h-56']" />
         </div>
-        <div class="rounded-xl border bg-card p-5">
+        <div class="rounded-xl bg-card p-5">
           <Skeleton :class="[shimmer, 'h-5 w-32']" />
           <div class="mt-3 grid gap-x-8 sm:grid-flow-col sm:grid-cols-2 sm:grid-rows-5">
             <div v-for="row in 10" :key="row" class="flex items-center gap-3 py-2.5">

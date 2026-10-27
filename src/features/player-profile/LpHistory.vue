@@ -103,7 +103,7 @@ const shortDate = (time: number) => format.date(new Date(time), { day: 'numeric'
   <section
     :aria-labelledby="titleId"
     :data-tier="current?.tier ?? 'NONE'"
-    class="rounded-xl border bg-card p-5 text-card-foreground"
+    class="rounded-xl bg-card p-5 text-card-foreground"
   >
     <header class="flex flex-wrap items-start justify-between gap-3">
       <div class="flex flex-col gap-0.5">
@@ -136,7 +136,7 @@ const shortDate = (time: number) => format.date(new Date(time), { day: 'numeric'
           v-for="option in ['solo', 'flex'] as const"
           :key="option"
           :value="option"
-          class="h-9 rounded-sm px-3 text-xs text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm sm:h-7 sm:px-2.5"
+          class="h-9 rounded-sm px-3 text-xs text-muted-foreground data-[state=on]:bg-brand-muted data-[state=on]:font-semibold data-[state=on]:text-brand-muted-foreground data-[state=on]:ring-1 data-[state=on]:ring-primary data-[state=on]:ring-inset sm:h-7 sm:px-2.5"
         >
           {{ t(`player.queuesShort.${option}`) }}
         </ToggleGroupItem>

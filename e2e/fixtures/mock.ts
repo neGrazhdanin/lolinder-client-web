@@ -24,7 +24,7 @@ export interface MockResponse {
   headers?: Record<string, string>;
 }
 
-type Handler = (request: { url: URL; method: string }) => MockResponse;
+type Handler = (request: { url: URL; method: string }) => MockResponse | Promise<MockResponse>;
 
 export function notFound(code: ErrorResponse['code'] = 'NOT_FOUND'): MockResponse {
   return { status: 404, body: { code } };
@@ -72,7 +72,7 @@ export class MockApi {
       const handler = this.handlers.find(
         (entry) => entry.method === request.method() && entry.pattern.test(url.pathname),
       );
-      const response = handler?.handle({ url, method: request.method() }) ?? notFound();
+      const response = (await handler?.handle({ url, method: request.method() })) ?? notFound();
       await route.fulfill({
         status: response.status ?? 200,
         contentType: 'application/json',
@@ -109,8 +109,16 @@ export class MockRealtime {
   }
 
   playerUpdated(puuid: string): void {
+    this.emit('player:updated', puuid);
+  }
+
+  matchesUpdated(puuid: string): void {
+    this.emit('player:matches-updated', puuid);
+  }
+
+  private emit(event: string, puuid: string): void {
     if (!this.socket) throw new Error('no socket connected');
-    this.socket.send(`42${JSON.stringify(['player:updated', { puuid }])}`);
+    this.socket.send(`42${JSON.stringify([event, { puuid }])}`);
   }
 }
 

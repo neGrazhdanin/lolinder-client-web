@@ -21,7 +21,7 @@ const top = computed(() => Math.max(1, ...props.masteries.map((mastery) => maste
 </script>
 
 <template>
-  <section aria-labelledby="mastery-title" class="rounded-xl border bg-card text-card-foreground">
+  <section aria-labelledby="mastery-title" class="rounded-xl bg-card text-card-foreground">
     <header class="flex items-baseline justify-between gap-4 px-5 pt-5">
       <h2 id="mastery-title" class="text-base font-semibold tracking-tight">
         {{ t('player.mastery.title') }}

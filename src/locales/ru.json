@@ -31,7 +31,8 @@
   },
   "home": {
     "title": "Найти игрока",
-    "subtitle": "Ранги, история LP и любимые чемпионы любого аккаунта League of Legends."
+    "subtitle": "Ранги, история LP и любимые чемпионы любого аккаунта League of Legends.",
+    "petPoro": "Погладить поро"
   },
   "player": {
     "documentTitle": "{riotId} · lolinder",
@@ -120,6 +121,89 @@
       "tracking": "Отслеживаем с {date}. Линия сдвинется со следующим изменением LP.",
       "keyboardHint": "Стрелки переключают точки.",
       "pointAnnouncement": "{date}: {rank}, {lp} LP"
+    },
+    "matches": {
+      "title": "История матчей",
+      "filter": "Режим игры",
+      "filters": {
+        "all": "Все",
+        "solo": "Соло/Дуо",
+        "flex": "Флекс",
+        "normal": "Обычные",
+        "aram": "ARAM",
+        "arena": "Арена"
+      },
+      "queues": {
+        "solo": "Рейтинговая Соло/Дуо",
+        "flex": "Рейтинговая Флекс",
+        "draft": "Обычная: выбор",
+        "blind": "Обычная: вслепую",
+        "quickplay": "Быстрая игра",
+        "swiftplay": "Быстрая игра",
+        "aram": "ARAM",
+        "aramMayhem": "ARAM: Хаос",
+        "arena": "Арена",
+        "clash": "Clash",
+        "aramClash": "ARAM Clash",
+        "coop": "Против ИИ",
+        "urf": "URF",
+        "oneForAll": "Один за всех",
+        "nexusBlitz": "Штурм Нексуса",
+        "spellbook": "Книга заклинаний",
+        "custom": "Пользовательская игра",
+        "other": "Особый режим"
+      },
+      "queuesShort": {
+        "solo": "Соло/Дуо",
+        "flex": "Флекс",
+        "blind": "Вслепую",
+        "custom": "Своя игра"
+      },
+      "result": {
+        "win": "Победа",
+        "loss": "Поражение",
+        "remake": "Ремейк"
+      },
+      "placement": {
+        "one": "{place}-е место",
+        "two": "{place}-е место",
+        "few": "{place}-е место",
+        "other": "{place}-е место"
+      },
+      "form": {
+        "label": "Последние игры: выиграно {wins}, проиграно {losses}",
+        "last": "Последние {count}",
+        "wins": "{count}В",
+        "losses": "{count}П"
+      },
+      "kda": "{ratio} KDA",
+      "perfectKda": "Без смертей",
+      "kdaLabel": "Убийства {kills}, смерти {deaths}, помощь {assists}",
+      "cs": "{cs} CS",
+      "csPerMinute": "{value}/мин",
+      "spells": "Заклинания призывателя",
+      "runes": "Руны",
+      "items": "Предметы",
+      "team": "Команда {number}",
+      "participant": "{name}, {champion}",
+      "unknownChampion": "Чемпион #{id}",
+      "unknownItem": "Предмет #{id}",
+      "unknownSpell": "Заклинание #{id}",
+      "unknownRune": "Руна #{id}",
+      "loading": "Загружаем игры из Riot",
+      "loadingOlder": "Загружаем более старые игры",
+      "checkingNew": "Ищем новые игры",
+      "loadMore": "Загрузить ещё",
+      "loadingMore": "Загружаем игры",
+      "loadFailed": "Не удалось загрузить игры.",
+      "end": "Более старых игр нет",
+      "error": "Не удалось загрузить историю матчей",
+      "empty": "Игр пока нет",
+      "emptyHint": "Здесь появляются завершённые игры. Обновите профиль после игры, чтобы они подтянулись.",
+      "emptyMore": "Среди последних игр таких нет. Загрузите более старые, чтобы поискать дальше.",
+      "emptyFiltered": "Нет игр в этом режиме",
+      "emptyFilteredHint": "Игрок давно в нём не играл.",
+      "showAll": "Показать все режимы"
     }
   },
   "platforms": {
@@ -170,6 +254,7 @@
     "INTERNAL_ERROR": "Что-то пошло не так",
     "NETWORK": "Нет связи с сервером",
     "PLAYER_NOT_FOUND": "Игрок не найден",
+    "MATCH_NOT_FOUND": "Матч не найден",
     "SERVICE_UNAVAILABLE": "Сервис временно недоступен, попробуйте через минуту"
   }
 }

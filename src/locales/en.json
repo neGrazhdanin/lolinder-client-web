@@ -31,7 +31,8 @@
   },
   "home": {
     "title": "Find a player",
-    "subtitle": "Ranks, LP history and most-played champions for any League of Legends account."
+    "subtitle": "Ranks, LP history and most-played champions for any League of Legends account.",
+    "petPoro": "Pet the poro"
   },
   "player": {
     "documentTitle": "{riotId} · lolinder",
@@ -120,6 +121,89 @@
       "tracking": "Tracking since {date}. The line moves with the next LP change.",
       "keyboardHint": "Arrow keys move between points.",
       "pointAnnouncement": "{date}: {rank}, {lp} LP"
+    },
+    "matches": {
+      "title": "Match history",
+      "filter": "Game mode",
+      "filters": {
+        "all": "All",
+        "solo": "Solo/Duo",
+        "flex": "Flex",
+        "normal": "Normal",
+        "aram": "ARAM",
+        "arena": "Arena"
+      },
+      "queues": {
+        "solo": "Ranked Solo/Duo",
+        "flex": "Ranked Flex",
+        "draft": "Normal Draft",
+        "blind": "Normal Blind",
+        "quickplay": "Quickplay",
+        "swiftplay": "Swiftplay",
+        "aram": "ARAM",
+        "aramMayhem": "ARAM: Mayhem",
+        "arena": "Arena",
+        "clash": "Clash",
+        "aramClash": "ARAM Clash",
+        "coop": "Co-op vs. AI",
+        "urf": "URF",
+        "oneForAll": "One for All",
+        "nexusBlitz": "Nexus Blitz",
+        "spellbook": "Ultimate Spellbook",
+        "custom": "Custom game",
+        "other": "Special mode"
+      },
+      "queuesShort": {
+        "solo": "Solo/Duo",
+        "flex": "Flex",
+        "blind": "Blind Pick",
+        "custom": "Custom"
+      },
+      "result": {
+        "win": "Victory",
+        "loss": "Defeat",
+        "remake": "Remake"
+      },
+      "placement": {
+        "one": "{place}st",
+        "two": "{place}nd",
+        "few": "{place}rd",
+        "other": "{place}th"
+      },
+      "form": {
+        "label": "Recent games: won {wins}, lost {losses}",
+        "last": "Last {count}",
+        "wins": "{count}W",
+        "losses": "{count}L"
+      },
+      "kda": "{ratio} KDA",
+      "perfectKda": "Perfect KDA",
+      "kdaLabel": "Kills {kills}, deaths {deaths}, assists {assists}",
+      "cs": "{cs} CS",
+      "csPerMinute": "{value}/min",
+      "spells": "Summoner spells",
+      "runes": "Runes",
+      "items": "Items",
+      "team": "Team {number}",
+      "participant": "{name}, {champion}",
+      "unknownChampion": "Champion #{id}",
+      "unknownItem": "Item #{id}",
+      "unknownSpell": "Summoner spell #{id}",
+      "unknownRune": "Rune #{id}",
+      "loading": "Loading games from Riot",
+      "loadingOlder": "Loading older games",
+      "checkingNew": "Checking for new games",
+      "loadMore": "Load more games",
+      "loadingMore": "Loading games",
+      "loadFailed": "Couldn't load the games.",
+      "end": "No older games",
+      "error": "Couldn't load the match history",
+      "empty": "No games yet",
+      "emptyHint": "Finished games show up here. Refresh the profile after playing to bring them in.",
+      "emptyMore": "None among the recent games. Load older ones to look further back.",
+      "emptyFiltered": "No games in this mode",
+      "emptyFilteredHint": "This player hasn't played it lately.",
+      "showAll": "Show all modes"
     }
   },
   "platforms": {
@@ -170,6 +254,7 @@
     "INTERNAL_ERROR": "Something went wrong",
     "NETWORK": "No connection to the server",
     "PLAYER_NOT_FOUND": "Player not found",
+    "MATCH_NOT_FOUND": "Match not found",
     "SERVICE_UNAVAILABLE": "The service is temporarily unavailable, try again in a minute"
   }
 }
