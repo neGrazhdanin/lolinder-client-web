@@ -109,8 +109,16 @@ export class MockRealtime {
   }
 
   playerUpdated(puuid: string): void {
+    this.emit('player:updated', puuid);
+  }
+
+  matchesUpdated(puuid: string): void {
+    this.emit('player:matches-updated', puuid);
+  }
+
+  private emit(event: string, puuid: string): void {
     if (!this.socket) throw new Error('no socket connected');
-    this.socket.send(`42${JSON.stringify(['player:updated', { puuid }])}`);
+    this.socket.send(`42${JSON.stringify([event, { puuid }])}`);
   }
 }
 
