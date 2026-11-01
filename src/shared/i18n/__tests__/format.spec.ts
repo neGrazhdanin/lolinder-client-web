@@ -11,6 +11,13 @@ describe('formatRelativeTime', () => {
     expect(formatRelativeTime(ago(6 * 86400), now, 'en')).toBe('6 days ago');
   });
 
+  it('keeps a number instead of phrases like "yesterday" or "last week"', () => {
+    expect(formatRelativeTime(ago(86400), now, 'en')).toBe('1 day ago');
+    expect(formatRelativeTime(ago(8 * 86400), now, 'en', 'short')).toBe('1 wk. ago');
+    expect(formatRelativeTime(ago(8 * 86400), now, 'ru', 'short')).toBe('1 нед. назад');
+    expect(formatRelativeTime(ago(86400), now, 'ru')).toBe('1 день назад');
+  });
+
   it('says "now" under a minute instead of counting seconds', () => {
     expect(formatRelativeTime(ago(20), now, 'en')).toBe('now');
   });

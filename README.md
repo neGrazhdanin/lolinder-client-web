@@ -17,6 +17,8 @@ pnpm dev
 | `pnpm dev`                     | Dev server on http://localhost:5173                                                              |
 | `pnpm build`                   | Type-check and production build                                                                  |
 | `pnpm gen:api`                 | Regenerate the API client from `http://localhost:3000/docs-json` (override with `OPENAPI_INPUT`) |
+| `pnpm palette`                 | Regenerate the color tokens in `src/styles/main.css` from the seed                               |
+| `pnpm palette:check`           | Check text and icon contrast of the generated palette                                            |
 | `pnpm lint`                    | Oxlint, then ESLint (Vue templates, i18n, import boundaries)                                     |
 | `pnpm format` / `format:check` | Prettier                                                                                         |
 | `pnpm test`                    | Vitest unit tests                                                                                |

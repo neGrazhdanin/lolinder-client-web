@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import ActivityBars from '@/components/ActivityBars.vue';
 import CountUp from '@/components/CountUp.vue';
 import ProfileIcon from '@/components/ProfileIcon.vue';
-import TierCrest from '@/components/TierCrest.vue';
+import RankEmblem from '@/components/RankEmblem.vue';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Player, PlayerRank } from '@/shared/api';
@@ -39,15 +39,7 @@ const busy = computed(() => props.player.sync?.status === 'syncing' || props.ref
 
 <template>
   <!-- The page's one tinted surface: the plate takes the colour of the player's headline rank. -->
-  <header
-    :data-tier="rank?.tier ?? 'NONE'"
-    class="relative isolate overflow-hidden rounded-2xl border border-tier-line bg-card"
-  >
-    <div
-      class="absolute inset-0 -z-10 bg-[radial-gradient(110%_160%_at_100%_0%,var(--tier-wash)_0%,transparent_62%)]"
-      aria-hidden="true"
-    />
-
+  <header :data-tier="rank?.tier ?? 'NONE'" class="rounded-2xl bg-tier-container">
     <div class="flex flex-col gap-6 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
       <div class="flex min-w-0 items-center gap-4 sm:gap-5">
         <div class="relative shrink-0">
@@ -111,9 +103,8 @@ const busy = computed(() => props.player.sync?.status === 'syncing' || props.ref
       </div>
 
       <div class="flex items-center gap-4 sm:flex-row-reverse sm:text-right">
-        <TierCrest
+        <RankEmblem
           :tier="rankPending ? null : (rank?.tier ?? null)"
-          :division="rank?.division ?? null"
           :reveal="!rankPending"
           :class="['size-16 sm:size-20', rankPending && 'opacity-60']"
         />

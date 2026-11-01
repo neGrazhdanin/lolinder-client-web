@@ -47,7 +47,7 @@ async function closeSearch(): Promise<void> {
           :key="section.route"
           :to="{ name: section.route, params: { locale } }"
           :aria-current="currentSection === section.route ? 'page' : undefined"
-          class="rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
+          class="rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:bg-brand-muted aria-[current=page]:text-brand-muted-foreground"
         >
           {{ t(section.label) }}
         </RouterLink>

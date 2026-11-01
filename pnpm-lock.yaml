@@ -17,9 +17,6 @@ importers:
       '@lucide/vue':
         specifier: ^1.61.0
         version: 1.61.0(vue@3.5.44(typescript@6.0.3))
-      '@radix-ui/colors':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@tanstack/vue-query':
         specifier: ^5.104.5
         version: 5.104.5(vue@3.5.44(typescript@6.0.3))
@@ -63,6 +60,9 @@ importers:
       '@intlify/unplugin-vue-i18n':
         specifier: ^11.2.7
         version: 11.2.7(@vue/compiler-dom@3.5.44)(typescript@6.0.3)(vite@8.3.5(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))(vue-i18n@11.4.16(vue@3.5.44(typescript@6.0.3)))(vue@3.5.44(typescript@6.0.3))
+      '@material/material-color-utilities':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@playwright/test':
         specifier: ^1.63.0
         version: 1.64.1
@@ -769,6 +769,9 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
+  '@material/material-color-utilities@0.3.0':
+    resolution: {integrity: sha512-ztmtTd6xwnuh2/xu+Vb01btgV8SQWYCaK56CkRK8gEkWe5TuDyBcYJ0wgkMRn+2VcE9KUmhvkz+N9GHrqw/C0g==}
+
   '@napi-rs/wasm-runtime@1.2.5':
     resolution: {integrity: sha512-HshSvXzmBxNzqejd3k/KemgQ3hdREUYFRRrgxOZ+gPljDIsO2SDZrVZMd4Z/HsxudQbE62OVyVFE8z9BCurfjA==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
@@ -931,9 +934,6 @@ packages:
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
-
-  '@radix-ui/colors@3.0.0':
-    resolution: {integrity: sha512-FUOsGBkHrYJwCSEtWRCIfQbZG7q1e6DgxCIOe1SUQzDe/7rXXeA47s8yCn6fuTNQAj1Zq4oTFi9Yjp3wzElcxg==}
 
   '@rolldown/binding-android-arm-eabi@1.2.15':
     resolution: {integrity: sha512-aLcgK9gIJ3YRvrrtfSBbRa27F5WrpiTaPulnFpsHPxpUHgFlSgnU4854MHwoRGEBhfRJDWCS2WQ7lIjskE9Olw==}
@@ -4024,6 +4024,8 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
+  '@material/material-color-utilities@0.3.0': {}
+
   '@napi-rs/wasm-runtime@1.2.5(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)':
     dependencies:
       '@emnapi/core': 1.10.0
@@ -4114,8 +4116,6 @@ snapshots:
       playwright: 1.64.1
 
   '@polka/url@1.0.0-next.29': {}
-
-  '@radix-ui/colors@3.0.0': {}
 
   '@rolldown/binding-android-arm-eabi@1.2.15':
     optional: true

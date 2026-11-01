@@ -35,9 +35,12 @@ const teams = computed(() => teamsOf(props.match.participants));
 const duos = computed(() => teams.value.length > 2);
 
 const queueLabel = computed(() => t(`player.matches.queues.${queueName(props.match.queueId)}`));
+const SHORT_QUEUES = ['solo', 'flex', 'blind', 'custom'] as const;
 const queueLabelCompact = computed(() => {
   const name = queueName(props.match.queueId);
-  return name === 'solo' || name === 'flex' ? t(`player.queuesShort.${name}`) : queueLabel.value;
+  return SHORT_QUEUES.some((short) => short === name)
+    ? t(`player.matches.queuesShort.${name as (typeof SHORT_QUEUES)[number]}`)
+    : queueLabel.value;
 });
 
 const championName = (id: number) =>
@@ -79,49 +82,38 @@ const durationIso = computed(() => {
   return `PT${Math.floor(seconds / 60)}M${seconds % 60}S`;
 });
 
-const rail = { win: 'before:bg-win', loss: 'before:bg-loss', remake: 'before:bg-border' };
-const wash = {
-  win: 'from-win-muted',
-  loss: 'from-loss-muted',
-  remake: 'from-transparent',
-};
 const ink = { win: 'text-win', loss: 'text-loss', remake: 'text-muted-foreground' };
+const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40' };
 </script>
 
 <template>
   <article
     :aria-labelledby="`${resultId} ${championId}`"
     :data-result="result"
-    :class="[
-      'relative isolate grid overflow-hidden rounded-xl border bg-card py-3 pr-3 pl-4 text-card-foreground @xl:py-3.5 @xl:pr-4 @xl:pl-5',
-      'before:absolute before:inset-y-0 before:left-0 before:w-1',
-      rail[result],
-      'match-grid gap-x-4 gap-y-3 @xl:gap-x-5 @4xl:items-center',
-    ]"
+    class="match-grid grid gap-x-4 gap-y-3 rounded-xl bg-card px-4 py-3 text-card-foreground @xl:gap-x-5 @xl:px-5 @xl:py-3.5 @4xl:items-center"
   >
-    <div
-      :class="[
-        'absolute inset-y-0 left-0 -z-10 w-2/3 bg-linear-to-r to-transparent @xl:w-1/2',
-        wash[result],
-      ]"
-      aria-hidden="true"
-    />
-
     <div
       class="flex min-w-0 items-baseline gap-x-2 gap-y-0.5 [grid-area:meta] @xl:flex-col @xl:items-start @xl:justify-center"
     >
-      <h3 :id="resultId" :class="['shrink-0 text-sm font-semibold tracking-tight', ink[result]]">
+      <h3
+        :id="resultId"
+        :class="[
+          'inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold tracking-tight',
+          ink[result],
+        ]"
+      >
+        <span :class="['h-3.5 w-[3px] rounded-full', marker[result]]" aria-hidden="true" />
         {{ resultLabel }}
       </h3>
       <p
-        class="min-w-0 truncate text-xs font-medium text-foreground @xl:text-[13px]"
+        class="max-w-full min-w-0 truncate text-xs font-medium text-foreground @xl:text-[13px]"
         :title="queueLabel"
       >
-        <span class="@xl:hidden" aria-hidden="true">{{ queueLabelCompact }}</span>
-        <span class="sr-only @xl:not-sr-only">{{ queueLabel }}</span>
+        <span aria-hidden="true">{{ queueLabelCompact }}</span>
+        <span class="sr-only">{{ queueLabel }}</span>
       </p>
       <p
-        class="ml-auto flex shrink-0 items-baseline gap-1.5 text-xs text-muted-foreground @xl:mt-1 @xl:ml-0"
+        class="ml-auto flex shrink-0 items-baseline gap-x-1.5 text-xs whitespace-nowrap text-muted-foreground @xl:mt-1 @xl:ml-0 @xl:flex-col @xl:gap-y-0.5"
       >
         <time
           :datetime="match.startedAt"
@@ -129,7 +121,10 @@ const ink = { win: 'text-win', loss: 'text-loss', remake: 'text-muted-foreground
         >
           {{ format.relative(startedAt, now, 'short') }}
         </time>
-        <span class="size-0.5 self-center rounded-full bg-muted-foreground" aria-hidden="true" />
+        <span
+          class="size-0.5 self-center rounded-full bg-muted-foreground @xl:hidden"
+          aria-hidden="true"
+        />
         <time :datetime="durationIso" class="font-mono tabular-nums">
           {{ format.clock(match.durationSec) }}
         </time>
@@ -241,7 +236,7 @@ const ink = { win: 'text-win', loss: 'text-loss', remake: 'text-muted-foreground
           <span
             v-else
             :class="[
-              'block size-6 rounded-[5px] bg-muted/70 ring-1 ring-border ring-inset @xl:size-7',
+              'block size-6 rounded-[5px] bg-muted @xl:size-7',
               item.slot === 6 && 'rounded-full',
             ]"
           />

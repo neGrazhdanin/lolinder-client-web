@@ -79,16 +79,22 @@ test.describe('search', () => {
 
   test('repeats the search while the API answers 202', async ({ page, api }) => {
     let attempts = 0;
-    api.on('GET', SEARCH, () =>
-      ++attempts < 3
+    let release!: () => void;
+    const released = new Promise<void>((resolve) => (release = resolve));
+    // Holding the second attempt keeps the lookup pending until the test has seen it; otherwise a
+    // slow page load can outlast the whole 202 phase.
+    api.on('GET', SEARCH, async () => {
+      if (++attempts === 2) await released;
+      return attempts < 3
         ? { status: 202, body: { status: 'pending' }, headers: { 'retry-after': '1' } }
-        : { body: player },
-    );
+        : { body: player };
+    });
     api.on('GET', PROFILE, { body: profile });
 
     await page.goto(PROFILE_URL);
     await expect(page.getByRole('status').first()).toContainText('Looking up Chamomile#EUW on EUW');
     await expect(page.getByText('Riot is taking a while to answer')).toBeVisible();
+    release();
 
     await expect(page.getByRole('article', { name: 'Ranked Solo/Duo' })).toContainText(
       'Emerald II',
@@ -168,8 +174,20 @@ test.describe('live updates', () => {
     api.on('GET', PROFILE, { body: withSync(profile, 'syncing') });
 
     await page.goto(PROFILE_URL);
+    await expect(page.getByText('Updating from Riot')).toBeVisible();
     await expect.poll(() => realtime.rooms.has(PUUID)).toBe(true);
-    const profileCalls = api.count('GET', PROFILE);
+    // Joining while the profile syncs refetches it once; the baseline has to come after that refetch.
+    let profileCalls = -1;
+    await expect
+      .poll(
+        () => {
+          const previous = profileCalls;
+          profileCalls = api.count('GET', PROFILE);
+          return profileCalls === previous;
+        },
+        { intervals: [250] },
+      )
+      .toBe(true);
 
     // socket messages arrive in order, so once our own update has refetched, the other one had its chance
     realtime.playerUpdated('someone-else'.padEnd(78, '0'));
