@@ -7,6 +7,7 @@ interface PlayerEvent {
 
 interface ServerEvents {
   'player:updated': (event: PlayerEvent) => void;
+  'player:matches-updated': (event: PlayerEvent) => void;
   exception: (error: ErrorResponse) => void;
 }
 
@@ -19,6 +20,8 @@ export type PlayerSocket = Socket<ServerEvents, ClientEvents>;
 
 export interface PlayerListener {
   onUpdated(): void;
+  /** The match history gained games, or the job loading them gave up. */
+  onMatchesUpdated(): void;
   /**
    * The room is joined; events sent before this moment never reach the client. `afterReconnect`
    * means the socket dropped in between, so anything may have changed meanwhile.
@@ -51,10 +54,15 @@ export function createPlayerChannel(socket: PlayerSocket): PlayerChannel {
     if (reason === 'io server disconnect' && listeners.size > 0) socket.connect();
   });
 
-  socket.on('player:updated', (event) => {
+  function route(event: PlayerEvent | undefined, notify: (listener: PlayerListener) => void) {
     if (typeof event?.puuid !== 'string') return;
-    listeners.get(event.puuid)?.forEach((listener) => listener.onUpdated());
-  });
+    listeners.get(event.puuid)?.forEach(notify);
+  }
+
+  socket.on('player:updated', (event) => route(event, (listener) => listener.onUpdated()));
+  socket.on('player:matches-updated', (event) =>
+    route(event, (listener) => listener.onMatchesUpdated()),
+  );
 
   return {
     subscribe(puuid, listener) {

@@ -48,6 +48,27 @@ export function formatRelativeTime(
   return format.format(0, 'second');
 }
 
+export type OrdinalForm = 'one' | 'two' | 'few' | 'other';
+
+export function ordinalForm(value: number, locale: string): OrdinalForm {
+  const rules = cached(
+    'ordinal',
+    locale,
+    {},
+    () => new Intl.PluralRules(locale, { type: 'ordinal' }),
+  );
+  const form = rules.select(value);
+  return form === 'one' || form === 'two' || form === 'few' ? form : 'other';
+}
+
+export function formatGameClock(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const rest = String(seconds % 60).padStart(2, '0');
+  return hours > 0 ? `${hours}:${String(minutes).padStart(2, '0')}:${rest}` : `${minutes}:${rest}`;
+}
+
 export function useFormat() {
   const { locale } = useI18n();
 
@@ -58,6 +79,11 @@ export function useFormat() {
       numberFormat(locale.value, {
         notation: 'compact',
         maximumFractionDigits: value >= 1_000_000 ? 1 : 0,
+      }).format(value),
+    decimal: (value: number, digits: number) =>
+      numberFormat(locale.value, {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
       }).format(value),
     percent: (value: number) =>
       numberFormat(locale.value, { style: 'percent', maximumFractionDigits: 0 }).format(value),
@@ -70,6 +96,8 @@ export function useFormat() {
         options,
         () => new Intl.DateTimeFormat(locale.value, options),
       ).format(value),
+    clock: formatGameClock,
+    ordinal: (value: number) => ordinalForm(value, locale.value),
     relative: (value: Date, now: Date, style?: RelativeStyle) =>
       formatRelativeTime(value, now, locale.value, style),
   };

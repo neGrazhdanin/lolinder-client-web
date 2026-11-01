@@ -5,14 +5,22 @@ import { useI18n } from 'vue-i18n';
 import StatePanel from '@/components/StatePanel.vue';
 import { Button } from '@/components/ui/button';
 import { errorMessageKey, type Player } from '@/shared/api';
-import { formatRiotId, headlineRank, PLATFORM_CODES, type RankedQueue } from '@/shared/riot';
+import {
+  formatRiotId,
+  headlineRank,
+  type MatchQueue,
+  PLATFORM_CODES,
+  type RankedQueue,
+} from '@/shared/riot';
 import LpHistory from './LpHistory.vue';
 import MasteryList from './MasteryList.vue';
+import MatchHistory from './MatchHistory.vue';
 import ProfileHeader from './ProfileHeader.vue';
 import ProfileSkeleton from './ProfileSkeleton.vue';
 import RankCard from './RankCard.vue';
 import { awaitingFirstSync, syncFinished } from './sync';
 import { useLivePlayer } from './useLivePlayer';
+import { useMatchHistory } from './useMatchHistory';
 import { usePlayerProfile } from './usePlayerProfile';
 import { useRankHistory } from './useRankHistory';
 
@@ -22,10 +30,15 @@ const { t } = useI18n();
 const { profile, error, isPending, retry, refresh, isRefreshing } = usePlayerProfile(
   () => props.puuid,
 );
-useLivePlayer(
+const matchQueue = ref<MatchQueue>();
+const matches = useMatchHistory(
   () => props.puuid,
-  () => profile.value?.sync.status === 'syncing',
+  () => matchQueue.value,
 );
+useLivePlayer(() => props.puuid, {
+  isSyncing: () => profile.value?.sync.status === 'syncing',
+  isLoadingMatches: () => matches.isWaiting.value,
+});
 
 const placeholder = computed(() => !profile.value || awaitingFirstSync(profile.value.sync));
 const ranks = computed(() => profile.value?.ranks ?? []);
@@ -90,25 +103,37 @@ watch(
       :header="false"
     />
 
-    <!-- grid-cols-1 is minmax(0, 1fr): an implicit auto column grows to the rank row's min-content. -->
-    <div
-      v-else
-      class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-8"
-    >
-      <div class="grid grid-cols-1 content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
-        <RankCard queue="solo" :rank="solo" :placeholder="placeholder" />
-        <RankCard queue="flex" :rank="flex" :placeholder="placeholder" />
+    <template v-else>
+      <!-- grid-cols-1 is minmax(0, 1fr): an implicit auto column grows to the rank row's min-content. -->
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-8">
+        <div class="grid grid-cols-1 content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <RankCard queue="solo" :rank="solo" :placeholder="placeholder" />
+          <RankCard queue="flex" :rank="flex" :placeholder="placeholder" />
+        </div>
+        <div class="flex min-w-0 flex-col gap-6">
+          <LpHistory
+            v-model:queue="historyQueue"
+            :items="history.items.value"
+            :loading="history.isPending.value"
+            :ranked="(historyQueue === 'solo' ? solo : flex) !== undefined"
+          />
+          <MasteryList :masteries="profile?.topMasteries ?? []" :placeholder="placeholder" />
+        </div>
       </div>
-      <div class="flex min-w-0 flex-col gap-6">
-        <LpHistory
-          v-model:queue="historyQueue"
-          :items="history.items.value"
-          :loading="history.isPending.value"
-          :ranked="(historyQueue === 'solo' ? solo : flex) !== undefined"
-        />
-        <MasteryList :masteries="profile?.topMasteries ?? []" :placeholder="placeholder" />
-      </div>
-    </div>
+
+      <MatchHistory
+        v-model:queue="matchQueue"
+        :puuid="puuid"
+        :state="matches.state.value"
+        :pending="matches.isPending.value"
+        :stale="matches.isPlaceholder.value"
+        :error="matches.error.value"
+        :loading-more="matches.isLoadingMore.value"
+        :load-more-failed="matches.loadMoreFailed.value"
+        @load-more="matches.loadMore"
+        @retry="matches.retry"
+      />
+    </template>
 
     <p class="sr-only" aria-live="polite">{{ announcement }}</p>
   </div>
