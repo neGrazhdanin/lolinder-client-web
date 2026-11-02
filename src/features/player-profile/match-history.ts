@@ -1,23 +1,6 @@
 import type { MatchHistoryItem, MatchHistoryPage, MatchHistoryParticipant } from '@/shared/api';
 
-export type MatchResult = 'win' | 'loss' | 'remake';
-
-export function matchResult(match: Pick<MatchHistoryItem, 'win' | 'remake'>): MatchResult {
-  if (match.remake) return 'remake';
-  return match.win ? 'win' : 'loss';
-}
-
-export function kdaRatio({
-  kills,
-  deaths,
-  assists,
-}: Pick<MatchHistoryItem, 'kills' | 'deaths' | 'assists'>): number | null {
-  return deaths === 0 ? null : (kills + assists) / deaths;
-}
-
-export function csPerMinute({ cs, durationSec }: Pick<MatchHistoryItem, 'cs' | 'durationSec'>) {
-  return durationSec > 0 ? cs / (durationSec / 60) : 0;
-}
+export { csPerMinute, kdaRatio, matchResult } from '@/shared/riot';
 
 // In Arena teamId only splits the top four duos from the bottom four; the duo is the subteam.
 export function teamsOf(participants: readonly MatchHistoryParticipant[]) {
