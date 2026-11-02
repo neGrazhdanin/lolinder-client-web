@@ -17,6 +17,7 @@ export const ErrorCode = {
     NOT_FOUND: 'NOT_FOUND',
     PLAYER_NOT_FOUND: 'PLAYER_NOT_FOUND',
     MATCH_NOT_FOUND: 'MATCH_NOT_FOUND',
+    TIMELINE_UNAVAILABLE: 'TIMELINE_UNAVAILABLE',
     CONFLICT: 'CONFLICT',
     PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
     RATE_LIMITED: 'RATE_LIMITED',
@@ -319,6 +320,55 @@ export type MatchParticipant = {
     tagLine: string | null;
 };
 
+export type MatchTimeline = {
+    matchId: string;
+    /**
+     * Seconds from the start of each frame, about one a minute
+     */
+    frameTimes: Array<number>;
+    /**
+     * Total gold, CS and XP per frame
+     */
+    participants: Array<{
+        participantId: number;
+        gold: Array<number>;
+        cs: Array<number>;
+        xp: Array<number>;
+    }>;
+    /**
+     * Blue minus red team gold per frame; null in Arena
+     */
+    goldDiff: Array<number> | null;
+    /**
+     * Purchases and sales in game order, with undone ones removed
+     */
+    items: Array<TimelineItemEvent>;
+    /**
+     * Skill points in game order
+     */
+    skills: Array<TimelineSkillEvent>;
+};
+
+export type TimelineItemEvent = {
+    participantId: number;
+    atSec: number;
+    itemId: number;
+    kind: 'buy' | 'sell';
+};
+
+export type TimelineSkillEvent = {
+    participantId: number;
+    atSec: number;
+    /**
+     * 1–4: Q, W, E, R
+     */
+    slot: number;
+};
+
+export type MatchTimelinePending = {
+    status: 'pending';
+};
+
 export type HealthControllerCheckData = {
     body?: never;
     path?: never;
@@ -577,3 +627,35 @@ export type MatchesControllerMatchResponses = {
 };
 
 export type MatchesControllerMatchResponse = MatchesControllerMatchResponses[keyof MatchesControllerMatchResponses];
+
+export type MatchesControllerTimelineData = {
+    body?: never;
+    path: {
+        matchId: string;
+    };
+    query?: never;
+    url: '/matches/{matchId}/timeline';
+};
+
+export type MatchesControllerTimelineErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type MatchesControllerTimelineError = MatchesControllerTimelineErrors[keyof MatchesControllerTimelineErrors];
+
+export type MatchesControllerTimelineResponses = {
+    200: MatchTimeline;
+    /**
+     * Fetching from Riot: repeat the request after Retry-After seconds
+     */
+    202: MatchTimelinePending;
+};
+
+export type MatchesControllerTimelineResponse = MatchesControllerTimelineResponses[keyof MatchesControllerTimelineResponses];

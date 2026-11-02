@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/vue-query';
 
 import { client } from '../client.gen';
-import { healthControllerCheck, matchesControllerHistory, matchesControllerMatch, type Options, playersControllerProfile, playersControllerRankHistory, playersControllerRefresh, playersControllerSearch, staticDataControllerBundle, staticDataControllerLatest } from '../sdk.gen';
-import type { HealthControllerCheckData, HealthControllerCheckError, MatchesControllerHistoryData, MatchesControllerHistoryError, MatchesControllerHistoryResponse, MatchesControllerMatchData, MatchesControllerMatchError, MatchesControllerMatchResponse, PlayersControllerProfileData, PlayersControllerProfileError, PlayersControllerProfileResponse, PlayersControllerRankHistoryData, PlayersControllerRankHistoryError, PlayersControllerRankHistoryResponse, PlayersControllerRefreshData, PlayersControllerRefreshError, PlayersControllerRefreshResponse, PlayersControllerSearchData, PlayersControllerSearchError, PlayersControllerSearchResponse, StaticDataControllerBundleData, StaticDataControllerBundleError, StaticDataControllerBundleResponse, StaticDataControllerLatestData, StaticDataControllerLatestError, StaticDataControllerLatestResponse } from '../types.gen';
+import { healthControllerCheck, matchesControllerHistory, matchesControllerMatch, matchesControllerTimeline, type Options, playersControllerProfile, playersControllerRankHistory, playersControllerRefresh, playersControllerSearch, staticDataControllerBundle, staticDataControllerLatest } from '../sdk.gen';
+import type { HealthControllerCheckData, HealthControllerCheckError, MatchesControllerHistoryData, MatchesControllerHistoryError, MatchesControllerHistoryResponse, MatchesControllerMatchData, MatchesControllerMatchError, MatchesControllerMatchResponse, MatchesControllerTimelineData, MatchesControllerTimelineError, MatchesControllerTimelineResponse, PlayersControllerProfileData, PlayersControllerProfileError, PlayersControllerProfileResponse, PlayersControllerRankHistoryData, PlayersControllerRankHistoryError, PlayersControllerRankHistoryResponse, PlayersControllerRefreshData, PlayersControllerRefreshError, PlayersControllerRefreshResponse, PlayersControllerSearchData, PlayersControllerSearchError, PlayersControllerSearchResponse, StaticDataControllerBundleData, StaticDataControllerBundleError, StaticDataControllerBundleResponse, StaticDataControllerLatestData, StaticDataControllerLatestError, StaticDataControllerLatestResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -227,4 +227,19 @@ export const matchesControllerMatchOptions = (options: Options<MatchesController
         return data;
     },
     queryKey: matchesControllerMatchQueryKey(options)
+});
+
+export const matchesControllerTimelineQueryKey = (options: Options<MatchesControllerTimelineData>) => createQueryKey('matchesControllerTimeline', options);
+
+export const matchesControllerTimelineOptions = (options: Options<MatchesControllerTimelineData>) => queryOptions<MatchesControllerTimelineResponse, MatchesControllerTimelineError, MatchesControllerTimelineResponse, ReturnType<typeof matchesControllerTimelineQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await matchesControllerTimeline({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: matchesControllerTimelineQueryKey(options)
 });
