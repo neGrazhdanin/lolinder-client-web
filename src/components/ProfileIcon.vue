@@ -37,7 +37,7 @@ const fallback = computed(() => props.iconId === null || isError.value || state.
       @load="state = 'loaded'"
       @error="state = 'failed'"
     />
-    <AppLogo v-if="fallback" class="size-1/2 text-muted-foreground" />
+    <AppLogo v-if="fallback" mono class="size-1/2 text-muted-foreground/40" />
     <span
       v-else-if="state === 'loading'"
       class="absolute inset-0 animate-shimmer skeleton-shimmer"
