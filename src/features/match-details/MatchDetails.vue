@@ -7,6 +7,7 @@ import type { Match } from '@/shared/api';
 import { formatRiotId } from '@/shared/riot';
 import MatchHeader from './MatchHeader.vue';
 import MatchSideTable from './MatchSideTable.vue';
+import MatchTimeline from './MatchTimeline.vue';
 import { isArena, matchSides, maxDamage, playerLink, viewedParticipant } from './match-details';
 
 const props = defineProps<{ match: Match; viewedPuuid?: string }>();
@@ -59,7 +60,7 @@ const back = computed(() => {
       />
     </section>
 
-    <!-- #11 adds the timeline here (gold graph, build and skill order) from its own endpoint. -->
+    <MatchTimeline :match="match" :sides="sides" :arena="arena" :viewed-puuid="viewed?.puuid" />
 
     <StatePanel
       :title="t('match.comments.title')"
