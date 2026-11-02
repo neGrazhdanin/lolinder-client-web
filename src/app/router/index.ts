@@ -3,6 +3,7 @@ import DefaultLayout from '@/app/layouts/DefaultLayout.vue';
 import HomePage from '@/pages/HomePage.vue';
 import { isLocale, preferredLocale, SUPPORTED_LOCALES, setLocale } from '@/shared/i18n';
 import { PLATFORMS } from '@/shared/riot';
+import { nextPageEntered, pageKey } from './page-key';
 
 const SectionPlaceholderPage = () => import('@/pages/SectionPlaceholderPage.vue');
 const PlayerPage = () => import('@/pages/PlayerPage.vue');
@@ -36,6 +37,11 @@ export const router = createRouter({
       redirect: (to) => `/${preferredLocale()}${to.fullPath === '/' ? '' : to.fullPath}`,
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (from.matched.length === 0) return savedPosition ?? false;
+    if (pageKey(to) === pageKey(from)) return false;
+    return nextPageEntered().then(() => savedPosition ?? { top: 0 });
+  },
 });
 
 // Paths match case-insensitively, so `/EN/players/KR/…` reaches these routes with params the
