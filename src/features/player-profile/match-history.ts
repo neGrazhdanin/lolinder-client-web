@@ -1,6 +1,11 @@
+import type { RouteLocationRaw } from 'vue-router';
 import type { MatchHistoryItem, MatchHistoryPage, MatchHistoryParticipant } from '@/shared/api';
 
 export { csPerMinute, kdaRatio, matchResult } from '@/shared/riot';
+
+export function matchLink(locale: string, matchId: string, puuid: string): RouteLocationRaw {
+  return { name: 'match', params: { locale, matchId }, query: { player: puuid } };
+}
 
 // In Arena teamId only splits the top four duos from the bottom four; the duo is the subteam.
 export function teamsOf(participants: readonly MatchHistoryParticipant[]) {

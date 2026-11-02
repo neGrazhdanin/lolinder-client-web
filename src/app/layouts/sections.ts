@@ -9,9 +9,11 @@ export const SECTIONS = [
   { route: 'flex', label: 'nav.flex', icon: UsersIcon },
 ] as const;
 
-const SECTION_OF_ROUTE: Record<string, (typeof SECTIONS)[number]['route']> = { player: 'home' };
+const SECTION_OF_ROUTE: Record<string, (typeof SECTIONS)[number]['route']> = {
+  player: 'home',
+  match: 'home',
+};
 
-/** Player pages live under Stats, though their route is not the Stats link itself. */
 export function useCurrentSection() {
   const route = useRoute();
   return computed(() => {

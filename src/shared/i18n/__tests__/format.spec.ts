@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatGameClock, formatRelativeTime, ordinalForm } from '../format';
+import { formatGameClock, formatRelativeTime, isoDuration, ordinalForm } from '../format';
 
 const now = new Date('2026-10-25T12:00:00Z');
 const ago = (seconds: number) => new Date(now.getTime() - seconds * 1000);
@@ -64,5 +64,13 @@ describe('ordinalForm', () => {
       'other',
       'other',
     ]);
+  });
+});
+
+describe('isoDuration', () => {
+  it('writes a game length as an ISO 8601 duration', () => {
+    expect(isoDuration(28 * 60 + 31)).toBe('PT28M31S');
+    expect(isoDuration(3600 + 5)).toBe('PT60M5S');
+    expect(isoDuration(-3)).toBe('PT0M0S');
   });
 });

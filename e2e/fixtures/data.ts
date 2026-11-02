@@ -1,4 +1,5 @@
 import type {
+  Match,
   MatchHistoryItem,
   MatchHistoryPage,
   Player,
@@ -253,5 +254,97 @@ export function matchPage(
     items: Array.from({ length: count }, (_, offset) => historyMatch(from + offset, changes)),
     nextCursor,
     loading: IDLE,
+  };
+}
+
+const statLines = [
+  { kills: 7, deaths: 2, assists: 11, damageToChampions: 24_310, goldEarned: 12_940, cs: 201 },
+  { kills: 4, deaths: 5, assists: 6, damageToChampions: 18_022, goldEarned: 10_115, cs: 176 },
+  { kills: 9, deaths: 3, assists: 8, damageToChampions: 15_480, goldEarned: 11_870, cs: 38 },
+  { kills: 11, deaths: 4, assists: 5, damageToChampions: 31_905, goldEarned: 14_320, cs: 248 },
+  { kills: 1, deaths: 4, assists: 19, damageToChampions: 6_204, goldEarned: 7_610, cs: 22 },
+  { kills: 5, deaths: 6, assists: 3, damageToChampions: 21_430, goldEarned: 11_005, cs: 188 },
+  { kills: 3, deaths: 7, assists: 4, damageToChampions: 17_660, goldEarned: 9_730, cs: 190 },
+  { kills: 4, deaths: 6, assists: 2, damageToChampions: 9_870, goldEarned: 8_450, cs: 41 },
+  { kills: 6, deaths: 9, assists: 3, damageToChampions: 19_115, goldEarned: 10_240, cs: 205 },
+  { kills: 0, deaths: 7, assists: 9, damageToChampions: 4_998, goldEarned: 6_320, cs: 19 },
+];
+
+const ROLES = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY'];
+
+// Chamomile plays blue side; blue wins on even indexes.
+export function fullMatch(index = 0, changes: Partial<Match> = {}): Match {
+  const summary = historyMatch(index);
+  const blueWins = summary.win;
+  return {
+    matchId: summary.matchId,
+    platform: 'euw1',
+    queueId: summary.queueId,
+    patch: summary.patch,
+    startedAt: summary.startedAt,
+    durationSec: summary.durationSec,
+    remake: false,
+    winnerTeam: blueWins ? 100 : 200,
+    participants: summary.participants.map((slot, position) => ({
+      participantId: position + 1,
+      puuid: slot.puuid,
+      gameName: slot.gameName,
+      tagLine: slot.tagLine,
+      teamId: slot.teamId,
+      subteamId: null,
+      placement: null,
+      championId: slot.championId,
+      champLevel: 13 + (position % 5),
+      role: ROLES[position % 5]!,
+      ...statLines[position]!,
+      visionScore: 14 + position * 3,
+      items: position % 2 ? [3157, 3020, 0, 0, 0, 0, 3340] : [3020, 3089, 3157, 0, 0, 0, 3340],
+      summonerSpells: [4, 14],
+      runes: { primaryStyle: 8100, subStyle: 8200, perks: [8112], statPerks: [5008, 5008, 5001] },
+      win: slot.teamId === 100 ? blueWins : !blueWins,
+    })),
+    ...changes,
+  };
+}
+
+export const ARENA_PLACEMENTS = [2, 5, 1, 8, 3, 7, 4, 6];
+
+export function fullArenaMatch(index = 0): Match {
+  const summary = arenaMatch(index, ARENA_PLACEMENTS[0]!);
+  return {
+    matchId: summary.matchId,
+    platform: 'euw1',
+    queueId: summary.queueId,
+    patch: summary.patch,
+    startedAt: summary.startedAt,
+    durationSec: 1240,
+    remake: false,
+    winnerTeam: null,
+    participants: summary.participants.map((slot, position) => {
+      const placement = ARENA_PLACEMENTS[slot.subteamId! - 1]!;
+      return {
+        participantId: position + 1,
+        puuid: slot.puuid,
+        gameName: slot.gameName,
+        tagLine: slot.tagLine,
+        teamId: slot.teamId,
+        subteamId: slot.subteamId,
+        placement,
+        championId: slot.championId,
+        champLevel: 18,
+        role: null,
+        kills: 12 - placement,
+        deaths: placement,
+        assists: 4 + (position % 3),
+        damageToChampions: 60_000 - placement * 4_000 + position * 300,
+        goldEarned: 14_000 - placement * 600,
+        cs: 0,
+        visionScore: 0,
+        items: [3020, 3089, 3157, 0, 0, 0, 0],
+        summonerSpells: [4, 14],
+        runes: { primaryStyle: null, subStyle: null, perks: [], statPerks: [] },
+        win: placement <= 4,
+      };
+    }),
   };
 }

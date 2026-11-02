@@ -206,6 +206,47 @@
       "showAll": "Show all modes"
     }
   },
+  "match": {
+    "documentTitle": "{queue}, {date} · lolinder",
+    "backToProfile": "Back to {riotId}",
+    "patch": "Patch {patch}",
+    "duration": "Duration",
+    "sides": {
+      "blue": "Blue side",
+      "red": "Red side"
+    },
+    "sidesShort": {
+      "blue": "Blue",
+      "red": "Red"
+    },
+    "score": "Kills: blue side {blue}, red side {red}",
+    "scoreboard": "Scoreboard",
+    "columns": {
+      "champion": "Champion",
+      "loadout": "Spells and runes",
+      "player": "Player",
+      "kda": "KDA",
+      "damage": "Damage",
+      "gold": "Gold",
+      "cs": "CS",
+      "vision": "Vision",
+      "items": "Items"
+    },
+    "total": "Team total",
+    "bot": "Bot",
+    "loading": "Loading the match",
+    "notFound": {
+      "title": "Match not found",
+      "description": "lolinder keeps the matches from the histories of players who have been looked up. Check the link, or open the match from a player's profile."
+    },
+    "error": {
+      "title": "Couldn't load this match"
+    },
+    "comments": {
+      "title": "Comments",
+      "soon": "Comments will appear here."
+    }
+  },
   "platforms": {
     "br1": "Brazil",
     "eun1": "Europe Nordic & East",
