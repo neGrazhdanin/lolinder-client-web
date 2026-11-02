@@ -29,12 +29,9 @@ const shimmer = 'animate-shimmer skeleton-shimmer';
         <div v-for="card in 2" :key="card" class="rounded-xl bg-card p-5">
           <Skeleton :class="[shimmer, 'h-4 w-28']" />
           <div class="mt-4 flex items-center gap-4">
-            <svg viewBox="0 0 48 48" class="size-14" aria-hidden="true">
-              <polygon
-                points="24,3 42.19,13.5 42.19,34.5 24,45 5.81,34.5 5.81,13.5"
-                class="fill-muted"
-              />
-            </svg>
+            <span class="grid size-14 shrink-0 place-items-center">
+              <Skeleton :class="[shimmer, 'aspect-square w-3/4 rounded-full']" />
+            </span>
             <div class="flex flex-1 flex-col gap-2">
               <Skeleton :class="[shimmer, 'h-5 w-32']" />
               <Skeleton :class="[shimmer, 'h-3 w-24']" />
