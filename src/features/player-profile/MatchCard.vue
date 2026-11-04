@@ -5,15 +5,15 @@ import { useI18n } from 'vue-i18n';
 import ChampionIcon from '@/components/ChampionIcon.vue';
 import GameIcon from '@/components/GameIcon.vue';
 import type { MatchHistoryItem, MatchHistoryParticipant } from '@/shared/api';
-import { useFormat } from '@/shared/i18n/format';
+import { isoDuration, useFormat } from '@/shared/i18n/format';
 import { cn } from '@/shared/lib/utils';
 import { formatRiotId, queueName } from '@/shared/riot';
 import { useStaticData } from '@/shared/static-data';
-import { csPerMinute, kdaRatio, matchResult, teamsOf } from './match-history';
+import { csPerMinute, kdaRatio, matchLink, matchResult, teamsOf } from './match-history';
 
 const props = defineProps<{ match: MatchHistoryItem; puuid: string }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const format = useFormat();
 const now = useNow({ scheduler: (tick) => useIntervalFn(tick, 60_000) });
 const { lookup } = useStaticData();
@@ -21,6 +21,7 @@ const resultId = useId();
 const championId = useId();
 
 const result = computed(() => matchResult(props.match));
+const link = computed(() => matchLink(locale.value, props.match.matchId, props.puuid));
 const ratio = computed(() => kdaRatio(props.match));
 const resultLabel = computed(() => {
   const { placement } = props.match;
@@ -77,10 +78,7 @@ function playerTitle(participant: MatchHistoryParticipant): string {
   return t('player.matches.participant', { name, champion });
 }
 
-const durationIso = computed(() => {
-  const seconds = Math.max(0, Math.round(props.match.durationSec));
-  return `PT${Math.floor(seconds / 60)}M${seconds % 60}S`;
-});
+const durationIso = computed(() => isoDuration(props.match.durationSec));
 
 const ink = { win: 'text-win', loss: 'text-loss', remake: 'text-muted-foreground' };
 const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40' };
@@ -90,7 +88,7 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
   <article
     :aria-labelledby="`${resultId} ${championId}`"
     :data-result="result"
-    class="match-grid grid gap-x-4 gap-y-3 rounded-xl bg-card px-4 py-3 text-card-foreground @xl:gap-x-5 @xl:px-5 @xl:py-3.5 @4xl:items-center"
+    class="match-grid relative grid gap-x-4 gap-y-3 rounded-xl bg-card px-4 py-3 text-card-foreground transition-shadow hover:ring-1 hover:ring-border has-focus-visible:ring-3 has-focus-visible:ring-ring/50 @xl:gap-x-5 @xl:px-5 @xl:py-3.5 @4xl:items-center"
   >
     <div
       class="flex min-w-0 items-baseline gap-x-2 gap-y-0.5 [grid-area:meta] @xl:flex-col @xl:items-start @xl:justify-center"
@@ -103,7 +101,13 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
         ]"
       >
         <span :class="['h-3.5 w-[3px] rounded-full', marker[result]]" aria-hidden="true" />
-        {{ resultLabel }}
+        <RouterLink
+          :to="link"
+          :aria-labelledby="`${resultId} ${championId}`"
+          class="outline-none after:absolute after:inset-0 after:rounded-xl"
+        >
+          {{ resultLabel }}
+        </RouterLink>
       </h3>
       <p
         class="max-w-full min-w-0 truncate text-xs font-medium text-foreground @xl:text-[13px]"

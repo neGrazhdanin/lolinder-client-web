@@ -3,6 +3,7 @@ import type { MatchHistoryItem, MatchHistoryPage } from '@/shared/api';
 import {
   csPerMinute,
   kdaRatio,
+  matchLink,
   matchListState,
   matchResult,
   recentForm,
@@ -166,5 +167,15 @@ describe('matchListState', () => {
       page([match(2), match(1)], null),
     ]);
     expect(state.items.map((item) => item.matchId)).toEqual(['EUW1_3', 'EUW1_2', 'EUW1_1']);
+  });
+});
+
+describe('matchLink', () => {
+  it('opens the match page for the player whose history it is', () => {
+    expect(matchLink('ru', 'EUW1_7000000001', 'puuid-1')).toEqual({
+      name: 'match',
+      params: { locale: 'ru', matchId: 'EUW1_7000000001' },
+      query: { player: 'puuid-1' },
+    });
   });
 });

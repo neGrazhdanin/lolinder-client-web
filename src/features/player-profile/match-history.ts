@@ -1,22 +1,10 @@
+import type { RouteLocationRaw } from 'vue-router';
 import type { MatchHistoryItem, MatchHistoryPage, MatchHistoryParticipant } from '@/shared/api';
 
-export type MatchResult = 'win' | 'loss' | 'remake';
+export { csPerMinute, kdaRatio, matchResult } from '@/shared/riot';
 
-export function matchResult(match: Pick<MatchHistoryItem, 'win' | 'remake'>): MatchResult {
-  if (match.remake) return 'remake';
-  return match.win ? 'win' : 'loss';
-}
-
-export function kdaRatio({
-  kills,
-  deaths,
-  assists,
-}: Pick<MatchHistoryItem, 'kills' | 'deaths' | 'assists'>): number | null {
-  return deaths === 0 ? null : (kills + assists) / deaths;
-}
-
-export function csPerMinute({ cs, durationSec }: Pick<MatchHistoryItem, 'cs' | 'durationSec'>) {
-  return durationSec > 0 ? cs / (durationSec / 60) : 0;
+export function matchLink(locale: string, matchId: string, puuid: string): RouteLocationRaw {
+  return { name: 'match', params: { locale, matchId }, query: { player: puuid } };
 }
 
 // In Arena teamId only splits the top four duos from the bottom four; the duo is the subteam.

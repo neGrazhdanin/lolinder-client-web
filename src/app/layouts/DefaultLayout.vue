@@ -1,18 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import type { RouteLocationNormalizedLoaded } from 'vue-router';
+import { pageEntered, pageKey } from '@/app/router/page-key';
 import AppHeader from './AppHeader.vue';
 import MobileTabBar from './MobileTabBar.vue';
 
 const { t } = useI18n();
-
-// Switching the language or fixing a Riot ID's casing in the URL keeps the page mounted.
-function pageKey(route: RouteLocationNormalizedLoaded): string {
-  const { platform, riotId } = route.params;
-  return [String(route.name), platform, typeof riotId === 'string' ? riotId.toLowerCase() : '']
-    .filter(Boolean)
-    .join(':');
-}
 </script>
 
 <template>
@@ -27,6 +19,7 @@ function pageKey(route: RouteLocationNormalizedLoaded): string {
           enter-active-class="transition duration-300 ease-out"
           leave-to-class="opacity-0"
           leave-active-class="transition duration-150 ease-in"
+          @enter="pageEntered"
         >
           <component :is="Component" :key="pageKey(route)" />
         </Transition>

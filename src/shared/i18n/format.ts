@@ -69,6 +69,11 @@ export function formatGameClock(totalSeconds: number): string {
   return hours > 0 ? `${hours}:${String(minutes).padStart(2, '0')}:${rest}` : `${minutes}:${rest}`;
 }
 
+export function isoDuration(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.round(totalSeconds));
+  return `PT${Math.floor(seconds / 60)}M${seconds % 60}S`;
+}
+
 export function useFormat() {
   const { locale } = useI18n();
 
