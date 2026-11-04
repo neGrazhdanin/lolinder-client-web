@@ -1,6 +1,7 @@
 import type {
   Match,
   MatchHistoryItem,
+  MatchTimeline,
   MatchHistoryPage,
   Player,
   PlayerProfile,
@@ -94,14 +95,28 @@ const items = {
     3020: "Sorcerer's Shoes",
     3157: "Zhonya's Hourglass",
     3340: 'Stealth Ward',
+    1056: "Doran's Ring",
+    2003: 'Health Potion',
+    2055: 'Control Ward',
+    1058: 'Needlessly Large Rod',
   },
   ru: {
     3089: 'Смертельная шляпа Рабадона',
     3020: 'Сапоги чародея',
     3157: 'Песочные часы Жони',
     3340: 'Тотем-невидимка',
+    1056: 'Кольцо Дорана',
+    2003: 'Зелье здоровья',
+    2055: 'Контрольный тотем',
+    1058: 'Слишком большая палка',
   },
 } as const;
+
+const itemTags: Record<number, string[]> = {
+  3340: ['Trinket', 'Vision'],
+  2003: ['Consumable'],
+  2055: ['Consumable', 'Vision'],
+};
 
 const spells = {
   en: { 4: ['SummonerFlash', 'Flash'], 14: ['SummonerDot', 'Ignite'] },
@@ -130,7 +145,7 @@ export function staticBundle(locale: 'en' | 'ru'): StaticDataBundle {
       plaintext: '',
       gold: 0,
       image: `${id}.png`,
-      tags: [],
+      tags: itemTags[Number(id)] ?? [],
       from: [],
       into: [],
     })),
@@ -346,5 +361,66 @@ export function fullArenaMatch(index = 0): Match {
         win: placement <= 4,
       };
     }),
+  };
+}
+
+const BLUE = 100;
+
+/** A timeline for `fullMatch`/`fullArenaMatch`: blue side leads early, red side late. */
+export function matchTimeline(match: Match): MatchTimeline {
+  const frameTimes: number[] = [];
+  for (let at = 0; at < match.durationSec; at += 60) frameTimes.push(at);
+  frameTimes.push(match.durationSec);
+  const arena = match.participants.some((participant) => participant.subteamId !== null);
+
+  const participants = match.participants.map((participant) => ({
+    participantId: participant.participantId,
+    gold: frameTimes.map((at, frame) => {
+      const minute = at / 60;
+      const swing =
+        participant.teamId === BLUE ? 40 * Math.min(minute, 15) : 60 * Math.max(0, minute - 15);
+      return Math.round(500 + 380 * minute + swing + frame);
+    }),
+    cs: frameTimes.map((at) => Math.round((at / 60) * 7)),
+    xp: frameTimes.map((at) => Math.round(at * 6)),
+  }));
+
+  const teamGold = (frame: number, teamId: number) =>
+    participants
+      .filter((_, index) => match.participants[index]!.teamId === teamId)
+      .reduce((sum, participant) => sum + participant.gold[frame]!, 0);
+
+  const items = [
+    { participantId: 1, atSec: 3, itemId: 1056, kind: 'buy' as const },
+    { participantId: 1, atSec: 4, itemId: 2003, kind: 'buy' as const },
+    { participantId: 1, atSec: 5, itemId: 2003, kind: 'buy' as const },
+    { participantId: 6, atSec: 4, itemId: 1056, kind: 'buy' as const },
+    { participantId: 1, atSec: 521, itemId: 3020, kind: 'buy' as const },
+    { participantId: 1, atSec: 523, itemId: 2055, kind: 'buy' as const },
+    { participantId: 6, atSec: 610, itemId: 3157, kind: 'buy' as const },
+    { participantId: 1, atSec: 905, itemId: 1058, kind: 'buy' as const },
+    { participantId: 1, atSec: 1210, itemId: 1056, kind: 'sell' as const },
+    { participantId: 1, atSec: 1212, itemId: 3089, kind: 'buy' as const },
+    { participantId: 1, atSec: 1500, itemId: 3157, kind: 'buy' as const },
+  ];
+
+  const order = [1, 3, 2, 1, 1, 4, 1, 1, 3, 3, 4, 3, 3, 2, 2, 4, 2, 2];
+  const skills = match.participants.flatMap((participant) =>
+    order.map((slot, level) => ({
+      participantId: participant.participantId,
+      atSec: 60 + level * 90,
+      slot: participant.participantId === 6 && slot !== 4 ? 4 - slot : slot,
+    })),
+  );
+
+  return {
+    matchId: match.matchId,
+    frameTimes,
+    participants,
+    goldDiff: arena
+      ? null
+      : frameTimes.map((_, frame) => teamGold(frame, BLUE) - teamGold(frame, 200)),
+    items,
+    skills: skills.sort((a, b) => a.atSec - b.atSec),
   };
 }
