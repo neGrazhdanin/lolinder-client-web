@@ -24,13 +24,13 @@ test('waits while Riot prepares the timeline, then shows it', async ({ page, api
   expect(api.count('GET', TIMELINE)).toBe(2);
   await expect(timeline.getByRole('status')).toHaveCount(0);
 
-  const build = timeline.getByRole('region', { name: 'Build order' });
+  const build = page.getByRole('region', { name: 'Build order' });
   await expect(build.getByRole('img', { name: "Doran's Ring", exact: true })).toBeVisible();
   await expect(build.getByRole('img', { name: "Sold Doran's Ring" })).toBeVisible();
   await expect(build.getByRole('img', { name: 'Health Potion' })).toHaveCount(0);
   await expect(build.getByText('0:03', { exact: true })).toBeVisible();
 
-  const skills = timeline.getByRole('region', { name: 'Skill order' });
+  const skills = page.getByRole('region', { name: 'Skill order' });
   await expect(skills.getByRole('table')).toBeVisible();
   await expect(skills.locator('tr[data-slot="4"] span.bg-primary')).toHaveCount(3);
   await expect(skills.getByText('Max order')).toBeVisible();
@@ -45,27 +45,37 @@ test('renders the scoreboard without waiting for the timeline', async ({ page, a
   await expect(page.getByRole('region', { name: 'Timeline' }).getByRole('status')).toHaveText(
     'Loading the timeline',
   );
+  await expect(page.getByRole('region', { name: 'Runes' })).toBeVisible();
 });
 
-test('switches the build and skills to another player', async ({ page, api }) => {
+test('expands another player with their runes, build and skills', async ({ page, api }) => {
   const match = fullMatch(0);
   api.on('GET', MATCH, { body: match });
   api.on('GET', TIMELINE, { body: matchTimeline(match) });
 
   await page.goto(MATCH_URL);
-  const timeline = page.getByRole('region', { name: 'Timeline' });
-  const players = timeline.getByRole('group', { name: 'Player' });
-  await expect(players.getByRole('button', { name: 'Chamomile#EUW, Ahri' })).toHaveAttribute(
-    'aria-pressed',
+  const viewed = page.getByRole('button', { name: 'Details for Chamomile#EUW, Ahri' });
+  await expect(viewed).toHaveAttribute('aria-expanded', 'true');
+  await viewed.click();
+  await expect(viewed).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.getByRole('region', { name: 'Build order' })).toHaveCount(0);
+
+  await page.getByRole('row').filter({ hasText: 'Sencha' }).locator('td.c-gold').click();
+  await expect(page.getByRole('button', { name: 'Details for Sencha#EUW, Sylas' })).toHaveAttribute(
+    'aria-expanded',
     'true',
   );
-
-  await players.getByRole('button', { name: 'Sencha#EUW, Sylas' }).click();
-  const build = timeline.getByRole('region', { name: 'Build order' });
+  const build = page.getByRole('region', { name: 'Build order' });
   await expect(build.getByRole('img', { name: "Zhonya's Hourglass" })).toBeVisible();
   await expect(build.getByRole('img', { name: "Rabadon's Deathcap" })).toHaveCount(0);
-  const skills = timeline.getByRole('region', { name: 'Skill order' });
+  const skills = page.getByRole('region', { name: 'Skill order' });
   await expect(skills.locator('tr[data-slot="3"] td').first()).toContainText('1');
+
+  const runes = page.getByRole('region', { name: 'Runes' });
+  await expect(runes.getByRole('img', { name: 'Electrocute' })).toBeVisible();
+  await expect(
+    runes.getByRole('list', { name: 'Shards' }).getByRole('img', { name: 'Adaptive force' }),
+  ).toHaveCount(2);
 });
 
 test('shows consumables and wards on request', async ({ page, api }) => {
@@ -123,22 +133,21 @@ test('offers a retry when the timeline fails', async ({ page, api }) => {
   const timeline = page.getByRole('region', { name: 'Timeline' });
   await expect(timeline.getByRole('alert')).toContainText("Couldn't load the timeline");
   await timeline.getByRole('button', { name: 'Try again' }).click();
-  await expect(timeline.getByRole('region', { name: 'Build order' })).toBeVisible();
+  await expect(timeline.getByRole('img', { name: /^Gold difference/ })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Build order' })).toBeVisible();
 });
 
-test('leaves out the gold chart in Arena', async ({ page, api }) => {
+test('leaves out the gold chart in Arena but keeps the build', async ({ page, api }) => {
   const match = fullArenaMatch(0);
   api.on('GET', MATCH, { body: match });
   api.on('GET', TIMELINE, { body: matchTimeline(match) });
 
   await page.goto(MATCH_URL);
-  const timeline = page.getByRole('region', { name: 'Timeline' });
-  await expect(timeline.getByRole('region', { name: 'Build order' })).toBeVisible();
-  await expect(timeline.getByRole('img', { name: /^Gold difference/ })).toHaveCount(0);
-  await expect(timeline.getByRole('group', { name: 'Player' }).getByRole('button')).toHaveCount(16);
-  await expect(
-    timeline.getByRole('region', { name: 'Skill order' }).getByRole('table'),
-  ).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Timeline' })).toHaveCount(0);
+  await expect(page.getByRole('img', { name: /^Gold difference/ })).toHaveCount(0);
+  await expect(page.getByRole('region', { name: 'Build order' })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Skill order' }).getByRole('table')).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Runes' })).toHaveCount(0);
 });
 
 test.describe('mobile', () => {
@@ -152,9 +161,10 @@ test.describe('mobile', () => {
     await page.goto(`/ru/matches/EUW1_7000000000?player=${PUUID}`);
     const timeline = page.getByRole('region', { name: 'Ход матча' });
     await expect(timeline.getByRole('img', { name: /^Разница в золоте/ })).toBeVisible();
-    await expect(timeline.getByRole('region', { name: 'Порядок покупок' })).toContainText('0:03');
-    await expect(timeline.getByRole('img', { name: 'Продан: Кольцо Дорана' })).toBeVisible();
-    await expect(timeline.getByRole('region', { name: 'Порядок умений' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Порядок покупок' })).toContainText('0:03');
+    await expect(page.getByRole('img', { name: 'Продан: Кольцо Дорана' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Порядок умений' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Руны' })).toBeVisible();
 
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
