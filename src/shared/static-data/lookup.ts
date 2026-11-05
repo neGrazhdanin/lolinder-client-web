@@ -10,7 +10,9 @@ export interface StaticEntry {
 export interface StaticLookup {
   version: string;
   champion(id: number): (StaticEntry & { key: string; title: string }) | undefined;
-  item(id: number): (StaticEntry & { tags: readonly string[] }) | undefined;
+  item(
+    id: number,
+  ): (StaticEntry & { tags: readonly string[]; gold: number; plaintext: string }) | undefined;
   rune(id: number): StaticEntry | undefined;
   runeTree(id: number): (StaticEntry & { slots: readonly (readonly StaticEntry[])[] }) | undefined;
   summonerSpell(id: number): StaticEntry | undefined;
@@ -35,6 +37,8 @@ export function createStaticLookup(bundle: StaticDataBundle): StaticLookup {
     name: item.name,
     iconUrl: ddragonUrl.item(version, item.image),
     tags: item.tags,
+    gold: item.gold,
+    plaintext: item.plaintext,
   }));
   const spells = indexById(bundle.summonerSpells, (spell: SummonerSpell) => ({
     id: spell.id,
