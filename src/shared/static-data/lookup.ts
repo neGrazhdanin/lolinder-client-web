@@ -12,7 +12,7 @@ export interface StaticLookup {
   champion(id: number): (StaticEntry & { key: string; title: string }) | undefined;
   item(id: number): (StaticEntry & { tags: readonly string[] }) | undefined;
   rune(id: number): StaticEntry | undefined;
-  runeTree(id: number): StaticEntry | undefined;
+  runeTree(id: number): (StaticEntry & { slots: readonly (readonly StaticEntry[])[] }) | undefined;
   summonerSpell(id: number): StaticEntry | undefined;
 }
 
@@ -46,11 +46,14 @@ export function createStaticLookup(bundle: StaticDataBundle): StaticLookup {
     name: rune.name,
     iconUrl: ddragonUrl.rune(rune.icon),
   });
-  const trees = indexById(bundle.runeTrees, toRune);
   const runes = indexById(
     bundle.runeTrees.flatMap((tree) => tree.slots.flat()),
     toRune,
   );
+  const trees = indexById(bundle.runeTrees, (tree: RuneTree) => ({
+    ...toRune(tree),
+    slots: tree.slots.map((slot) => slot.flatMap((rune) => runes.get(rune.id) ?? [])),
+  }));
 
   return {
     version,

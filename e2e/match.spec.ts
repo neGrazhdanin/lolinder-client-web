@@ -38,8 +38,8 @@ test('opens a match from the profile and shows both teams', async ({ page, api }
 
   const blue = page.getByRole('table', { name: 'Victory Blue side' });
   const red = page.getByRole('table', { name: 'Defeat Red side' });
-  await expect(blue.locator('tbody').getByRole('row')).toHaveCount(5);
-  await expect(red.locator('tbody').getByRole('row')).toHaveCount(5);
+  await expect(blue.locator('tbody > tr.player-row')).toHaveCount(5);
+  await expect(red.locator('tbody > tr.player-row')).toHaveCount(5);
   await expect(page.getByRole('table')).toHaveCount(2);
 
   const blueTotals = blue.locator('tfoot').getByRole('row');
@@ -69,7 +69,7 @@ test('links players to their profiles, except bots', async ({ page, api }) => {
     'href',
     '/en/players/euw1/Earl%20Grey-EUW',
   );
-  const bot = blue.locator('tbody tr').nth(4);
+  const bot = blue.locator('tbody > tr.player-row').nth(4);
   await expect(bot).toContainText('Bot');
   await expect(bot.getByRole('link')).toHaveCount(0);
 
@@ -123,7 +123,7 @@ test('orders Arena duos by placement', async ({ page, api }) => {
   await expect(duos).toHaveCount(8);
   for (const [index, name] of ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'].entries()) {
     await expect(duos.nth(index)).toHaveAccessibleName(name);
-    await expect(duos.nth(index).locator('tbody').getByRole('row')).toHaveCount(2);
+    await expect(duos.nth(index).locator('tbody > tr.player-row')).toHaveCount(2);
   }
 
   const winners = 1 + ARENA_PLACEMENTS.indexOf(1);
@@ -200,7 +200,7 @@ test.describe('mobile', () => {
     await page.goto(`/ru/matches/EUW1_7000000000?player=${PUUID}`);
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Победа');
     const blue = page.getByRole('table', { name: 'Победа Синяя сторона' });
-    await expect(blue.locator('tbody').getByRole('row')).toHaveCount(5);
+    await expect(blue.locator('tbody > tr.player-row')).toHaveCount(5);
     await expect(page.getByRole('table', { name: 'Поражение Красная сторона' })).toBeVisible();
     await expect(blue.locator('tfoot')).toContainText('Итого');
     await expect(page.getByRole('heading', { name: 'Комментарии' })).toBeVisible();
