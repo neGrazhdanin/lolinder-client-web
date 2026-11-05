@@ -2,6 +2,7 @@
 import { computed, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
 import GameIcon from '@/components/GameIcon.vue';
+import GameTooltip from '@/components/GameTooltip.vue';
 import type { MatchRunes } from '@/shared/api';
 import { cn } from '@/shared/lib/utils';
 import { useStaticData } from '@/shared/static-data';
@@ -55,11 +56,19 @@ const shardName = (id: number) =>
               :aria-hidden="!option.picked || undefined"
               class="rune"
             >
-              <GameIcon
-                :src="option.entry.iconUrl"
-                :label="option.entry.name"
-                class="size-full bg-transparent"
-              />
+              <GameTooltip
+                :id="option.id"
+                kind="runes"
+                :name="option.entry.name"
+                :focusable="option.picked"
+              >
+                <GameIcon
+                  :native-title="false"
+                  :src="option.entry.iconUrl"
+                  :label="option.entry.name"
+                  class="size-full bg-transparent"
+                />
+              </GameTooltip>
             </span>
           </li>
         </ul>
@@ -85,11 +94,19 @@ const shardName = (id: number) =>
                 :aria-hidden="!option.picked || undefined"
                 class="rune"
               >
-                <GameIcon
-                  :src="option.entry.iconUrl"
-                  :label="option.entry.name"
-                  class="size-full bg-transparent"
-                />
+                <GameTooltip
+                  :id="option.id"
+                  kind="runes"
+                  :name="option.entry.name"
+                  :focusable="option.picked"
+                >
+                  <GameIcon
+                    :native-title="false"
+                    :src="option.entry.iconUrl"
+                    :label="option.entry.name"
+                    class="size-full bg-transparent"
+                  />
+                </GameTooltip>
               </span>
             </li>
           </ul>
@@ -101,11 +118,14 @@ const shardName = (id: number) =>
           :aria-label="t('match.details.shardsTitle')"
         >
           <li v-for="(shard, slot) in page.shards" :key="slot" class="shard">
-            <GameIcon
-              :src="shardIconUrl(shard)"
-              :label="shardName(shard)"
-              class="size-full bg-transparent"
-            />
+            <GameTooltip :id="shard" :name="shardName(shard)">
+              <GameIcon
+                :native-title="false"
+                :src="shardIconUrl(shard)"
+                :label="shardName(shard)"
+                class="size-full bg-transparent"
+              />
+            </GameTooltip>
           </li>
         </ul>
       </div>

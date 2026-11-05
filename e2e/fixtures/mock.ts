@@ -1,6 +1,6 @@
 import { test as base, type Page, type WebSocketRoute } from '@playwright/test';
 import type { ErrorResponse } from '../../src/shared/api/generated/types.gen';
-import { staticBundle, VERSION } from './data';
+import { staticBundle, staticDescriptions, VERSION } from './data';
 
 const API = process.env.VITE_API_URL ?? 'http://localhost:3000';
 const APP_ORIGIN = `http://localhost:${process.env.CI ? 4173 : 5173}`;
@@ -52,6 +52,9 @@ export class MockApi {
     this.on('GET', /^\/static-data\/latest$/, { body: { version: VERSION } });
     this.on('GET', /^\/static-data\/[\d.]+\/(en|ru)$/, ({ url }) => ({
       body: staticBundle(url.pathname.endsWith('/ru') ? 'ru' : 'en'),
+    }));
+    this.on('GET', /^\/static-data\/[\d.]+\/(en|ru)\/descriptions$/, ({ url }) => ({
+      body: staticDescriptions(url.pathname.includes('/ru/') ? 'ru' : 'en'),
     }));
 
     await page.route('https://ddragon.leagueoflegends.com/**', (route) =>

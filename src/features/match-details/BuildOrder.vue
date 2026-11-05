@@ -3,6 +3,7 @@ import { CheckIcon, ChevronRightIcon } from '@lucide/vue';
 import { computed, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
 import GameIcon from '@/components/GameIcon.vue';
+import GameTooltip from '@/components/GameTooltip.vue';
 import { Toggle } from '@/components/ui/toggle';
 import type { TimelineItemEvent } from '@/shared/api';
 import { useFormat } from '@/shared/i18n/format';
@@ -74,21 +75,24 @@ const itemName = (id: number) =>
               :data-kind="entry.kind"
               class="relative"
             >
-              <GameIcon
-                :src="lookup?.item(entry.itemId)?.iconUrl"
-                :label="
-                  entry.kind === 'sell'
-                    ? t('match.timeline.build.sold', { item: itemName(entry.itemId) })
-                    : itemName(entry.itemId)
-                "
-                :pending="!lookup"
-                :class="
-                  cn(
-                    'size-8 rounded-[5px] sm:size-9',
-                    entry.kind === 'sell' && 'opacity-45 grayscale',
-                  )
-                "
-              />
+              <GameTooltip :id="entry.itemId" kind="items" :name="itemName(entry.itemId)">
+                <GameIcon
+                  :native-title="false"
+                  :src="lookup?.item(entry.itemId)?.iconUrl"
+                  :label="
+                    entry.kind === 'sell'
+                      ? t('match.timeline.build.sold', { item: itemName(entry.itemId) })
+                      : itemName(entry.itemId)
+                  "
+                  :pending="!lookup"
+                  :class="
+                    cn(
+                      'size-8 rounded-[5px] sm:size-9',
+                      entry.kind === 'sell' && 'opacity-45 grayscale',
+                    )
+                  "
+                />
+              </GameTooltip>
               <span
                 v-if="entry.kind === 'sell'"
                 class="pointer-events-none absolute inset-0 overflow-hidden rounded-[5px]"

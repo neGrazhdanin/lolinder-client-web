@@ -3,12 +3,17 @@ import { CircleHelpIcon } from '@lucide/vue';
 import { computed, ref, watch } from 'vue';
 import { cn } from '@/shared/lib/utils';
 
-const props = defineProps<{
-  src: string | undefined;
-  label: string;
-  pending?: boolean;
-  class?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    src: string | undefined;
+    label: string;
+    pending?: boolean;
+    class?: string;
+    /** Off when a richer tooltip wraps the icon. */
+    nativeTitle?: boolean;
+  }>(),
+  { class: undefined, nativeTitle: true },
+);
 
 const state = ref<'loading' | 'loaded' | 'failed'>('loading');
 watch(
@@ -21,7 +26,7 @@ const showImage = computed(() => !!props.src && state.value !== 'failed');
 <template>
   <span
     :class="cn('relative inline-block shrink-0 overflow-hidden bg-muted', props.class)"
-    :title="label"
+    :title="nativeTitle ? label : undefined"
   >
     <img
       v-if="showImage"

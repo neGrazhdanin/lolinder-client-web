@@ -4,6 +4,7 @@ import { computed, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChampionIcon from '@/components/ChampionIcon.vue';
 import GameIcon from '@/components/GameIcon.vue';
+import GameTooltip from '@/components/GameTooltip.vue';
 import type { MatchParticipant } from '@/shared/api';
 import { useFormat } from '@/shared/i18n/format';
 import { cn } from '@/shared/lib/utils';
@@ -49,7 +50,7 @@ function toggle(participantId: number) {
 }
 
 function onRowClick(event: MouseEvent, participantId: number) {
-  if ((event.target as Element).closest('a, button')) return;
+  if ((event.target as Element).closest('a, button, [data-game-tooltip]')) return;
   if (window.getSelection()?.toString()) return;
   toggle(participantId);
 }
@@ -187,14 +188,23 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
               <span class="loadout">
                 <ul class="flex flex-col gap-0.5" :aria-label="t('player.matches.spells')">
                   <li v-for="(spell, index) in row.spells" :key="index">
-                    <GameIcon
-                      :src="spell.entry?.iconUrl"
-                      :label="
+                    <GameTooltip
+                      :id="spell.id"
+                      kind="summonerSpells"
+                      :name="
                         spell.entry?.name ?? t('player.matches.unknownSpell', { id: spell.id })
                       "
-                      :pending="!lookup"
-                      class="size-4 rounded-[4px] @min-[62rem]:size-[18px]"
-                    />
+                    >
+                      <GameIcon
+                        :native-title="false"
+                        :src="spell.entry?.iconUrl"
+                        :label="
+                          spell.entry?.name ?? t('player.matches.unknownSpell', { id: spell.id })
+                        "
+                        :pending="!lookup"
+                        class="size-4 rounded-[4px] @min-[62rem]:size-[18px]"
+                      />
+                    </GameTooltip>
                   </li>
                 </ul>
                 <ul
@@ -203,28 +213,47 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
                   :aria-label="t('player.matches.runes')"
                 >
                   <li v-if="row.keystone">
-                    <GameIcon
-                      :src="row.keystone.entry?.iconUrl"
-                      :label="
+                    <GameTooltip
+                      :id="row.keystone.id"
+                      kind="runes"
+                      :name="
                         row.keystone.entry?.name ??
                         t('player.matches.unknownRune', { id: row.keystone.id })
                       "
-                      :pending="!lookup"
-                      class="size-4 rounded-full bg-foreground/85 @min-[62rem]:size-[18px] dark:bg-muted"
-                    />
+                    >
+                      <GameIcon
+                        :native-title="false"
+                        :src="row.keystone.entry?.iconUrl"
+                        :label="
+                          row.keystone.entry?.name ??
+                          t('player.matches.unknownRune', { id: row.keystone.id })
+                        "
+                        :pending="!lookup"
+                        class="size-4 rounded-full bg-foreground/85 @min-[62rem]:size-[18px] dark:bg-muted"
+                      />
+                    </GameTooltip>
                   </li>
                   <li
                     v-if="row.tree"
                     class="grid size-4 place-items-center rounded-full bg-foreground/85 @min-[62rem]:size-[18px] dark:bg-transparent"
                   >
-                    <GameIcon
-                      :src="row.tree.entry?.iconUrl"
-                      :label="
+                    <GameTooltip
+                      :id="row.tree.id"
+                      :name="
                         row.tree.entry?.name ?? t('player.matches.unknownRune', { id: row.tree.id })
                       "
-                      :pending="!lookup"
-                      class="size-3 rounded-full bg-transparent @min-[62rem]:size-3.5"
-                    />
+                    >
+                      <GameIcon
+                        :native-title="false"
+                        :src="row.tree.entry?.iconUrl"
+                        :label="
+                          row.tree.entry?.name ??
+                          t('player.matches.unknownRune', { id: row.tree.id })
+                        "
+                        :pending="!lookup"
+                        class="size-3 rounded-full bg-transparent @min-[62rem]:size-3.5"
+                      />
+                    </GameTooltip>
                   </li>
                 </ul>
               </span>
@@ -324,18 +353,25 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
                   :class="item.slot === 6 && 'ml-1'"
                   :aria-hidden="item.id === 0 || undefined"
                 >
-                  <GameIcon
+                  <GameTooltip
                     v-if="item.id !== 0"
-                    :src="item.entry?.iconUrl"
-                    :label="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
-                    :pending="!lookup"
-                    :class="
-                      cn(
-                        'size-[22px] rounded-[4px] @min-[62rem]:size-6',
-                        item.slot === 6 && 'rounded-full',
-                      )
-                    "
-                  />
+                    :id="item.id"
+                    kind="items"
+                    :name="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
+                  >
+                    <GameIcon
+                      :native-title="false"
+                      :src="item.entry?.iconUrl"
+                      :label="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
+                      :pending="!lookup"
+                      :class="
+                        cn(
+                          'size-[22px] rounded-[4px] @min-[62rem]:size-6',
+                          item.slot === 6 && 'rounded-full',
+                        )
+                      "
+                    />
+                  </GameTooltip>
                   <span
                     v-else
                     :class="[
