@@ -9,6 +9,10 @@ Tasks live in GitHub Issues of this repo; backend epics are in `lolinder-api` #1
 
 `pnpm lint && pnpm typecheck && pnpm test && pnpm build`. Playwright: `pnpm test:e2e`
 (needs `pnpm exec playwright install chromium` once). `pnpm lint` auto-fixes; review what it changed.
+One unit file: `pnpm test src/features/player-search/__tests__/store.spec.ts`. Vue and e2e rules load from
+`.claude/rules/` when you work in those files.
+To see a change in the app, use the Playwright MCP (`.mcp.json`) against the dev servers (Vite `:5173`, API
+`:3000`). The user runs them: start your own on other ports if they are down, and leave theirs alone.
 
 ## API client
 
