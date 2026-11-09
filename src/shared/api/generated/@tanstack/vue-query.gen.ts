@@ -3,8 +3,8 @@
 import { type InfiniteData, infiniteQueryOptions, queryOptions, type UseMutationOptions } from '@tanstack/vue-query';
 
 import { client } from '../client.gen';
-import { healthControllerCheck, matchesControllerHistory, matchesControllerMatch, matchesControllerTimeline, type Options, playersControllerProfile, playersControllerRankHistory, playersControllerRefresh, playersControllerSearch, staticDataControllerBundle, staticDataControllerLatest } from '../sdk.gen';
-import type { HealthControllerCheckData, HealthControllerCheckError, MatchesControllerHistoryData, MatchesControllerHistoryError, MatchesControllerHistoryResponse, MatchesControllerMatchData, MatchesControllerMatchError, MatchesControllerMatchResponse, MatchesControllerTimelineData, MatchesControllerTimelineError, MatchesControllerTimelineResponse, PlayersControllerProfileData, PlayersControllerProfileError, PlayersControllerProfileResponse, PlayersControllerRankHistoryData, PlayersControllerRankHistoryError, PlayersControllerRankHistoryResponse, PlayersControllerRefreshData, PlayersControllerRefreshError, PlayersControllerRefreshResponse, PlayersControllerSearchData, PlayersControllerSearchError, PlayersControllerSearchResponse, StaticDataControllerBundleData, StaticDataControllerBundleError, StaticDataControllerBundleResponse, StaticDataControllerLatestData, StaticDataControllerLatestError, StaticDataControllerLatestResponse } from '../types.gen';
+import { healthControllerCheck, matchesControllerHistory, matchesControllerMatch, matchesControllerTimeline, type Options, playersControllerProfile, playersControllerRankHistory, playersControllerRefresh, playersControllerSearch, staticDataControllerBundle, staticDataControllerDescriptions, staticDataControllerLatest } from '../sdk.gen';
+import type { HealthControllerCheckData, HealthControllerCheckError, MatchesControllerHistoryData, MatchesControllerHistoryError, MatchesControllerHistoryResponse, MatchesControllerMatchData, MatchesControllerMatchError, MatchesControllerMatchResponse, MatchesControllerTimelineData, MatchesControllerTimelineError, MatchesControllerTimelineResponse, PlayersControllerProfileData, PlayersControllerProfileError, PlayersControllerProfileResponse, PlayersControllerRankHistoryData, PlayersControllerRankHistoryError, PlayersControllerRankHistoryResponse, PlayersControllerRefreshData, PlayersControllerRefreshError, PlayersControllerRefreshResponse, PlayersControllerSearchData, PlayersControllerSearchError, PlayersControllerSearchResponse, StaticDataControllerBundleData, StaticDataControllerBundleError, StaticDataControllerBundleResponse, StaticDataControllerDescriptionsData, StaticDataControllerDescriptionsError, StaticDataControllerDescriptionsResponse, StaticDataControllerLatestData, StaticDataControllerLatestError, StaticDataControllerLatestResponse } from '../types.gen';
 
 export type QueryKey<TOptions extends Options> = [
     Pick<TOptions, 'baseUrl' | 'body' | 'headers' | 'path' | 'query'> & {
@@ -82,6 +82,21 @@ export const staticDataControllerBundleOptions = (options: Options<StaticDataCon
         return data;
     },
     queryKey: staticDataControllerBundleQueryKey(options)
+});
+
+export const staticDataControllerDescriptionsQueryKey = (options: Options<StaticDataControllerDescriptionsData>) => createQueryKey('staticDataControllerDescriptions', options);
+
+export const staticDataControllerDescriptionsOptions = (options: Options<StaticDataControllerDescriptionsData>) => queryOptions<StaticDataControllerDescriptionsResponse, StaticDataControllerDescriptionsError, StaticDataControllerDescriptionsResponse, ReturnType<typeof staticDataControllerDescriptionsQueryKey>>({
+    queryFn: async ({ queryKey, signal }) => {
+        const { data } = await staticDataControllerDescriptions({
+            ...options,
+            ...queryKey[0],
+            signal,
+            throwOnError: true
+        });
+        return data;
+    },
+    queryKey: staticDataControllerDescriptionsQueryKey(options)
 });
 
 export const playersControllerSearchQueryKey = (options: Options<PlayersControllerSearchData>) => createQueryKey('playersControllerSearch', options);

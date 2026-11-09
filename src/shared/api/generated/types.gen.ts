@@ -85,6 +85,31 @@ export type SummonerSpell = {
     image: string;
 };
 
+export type StaticDataDescriptions = {
+    items: Array<{
+        id: number;
+        /**
+         * Data Dragon markup: custom tags such as <stats> and <passive>
+         */
+        description: string;
+    }>;
+    runes: Array<{
+        id: number;
+        /**
+         * Data Dragon markup: custom tags such as <stats> and <passive>
+         */
+        description: string;
+    }>;
+    summonerSpells: Array<{
+        id: number;
+        /**
+         * Data Dragon markup: custom tags such as <stats> and <passive>
+         */
+        description: string;
+        cooldownSec: number | null;
+    }>;
+};
+
 export const Platform = {
     BR1: 'br1',
     EUN1: 'eun1',
@@ -447,6 +472,35 @@ export type StaticDataControllerBundleResponses = {
 };
 
 export type StaticDataControllerBundleResponse = StaticDataControllerBundleResponses[keyof StaticDataControllerBundleResponses];
+
+export type StaticDataControllerDescriptionsData = {
+    body?: never;
+    path: {
+        version: string;
+        locale: 'en' | 'ru';
+    };
+    query?: never;
+    url: '/static-data/{version}/{locale}/descriptions';
+};
+
+export type StaticDataControllerDescriptionsErrors = {
+    /**
+     * Client error
+     */
+    '4XX': ErrorResponse;
+    /**
+     * Server error
+     */
+    '5XX': ErrorResponse;
+};
+
+export type StaticDataControllerDescriptionsError = StaticDataControllerDescriptionsErrors[keyof StaticDataControllerDescriptionsErrors];
+
+export type StaticDataControllerDescriptionsResponses = {
+    200: StaticDataDescriptions;
+};
+
+export type StaticDataControllerDescriptionsResponse = StaticDataControllerDescriptionsResponses[keyof StaticDataControllerDescriptionsResponses];
 
 export type PlayersControllerSearchData = {
     body?: never;

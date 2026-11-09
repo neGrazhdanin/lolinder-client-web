@@ -361,5 +361,9 @@
     "MATCH_NOT_FOUND": "Match not found",
     "TIMELINE_UNAVAILABLE": "The timeline is no longer available",
     "SERVICE_UNAVAILABLE": "The service is temporarily unavailable, try again in a minute"
+  },
+  "tooltip": {
+    "cost": "Cost",
+    "cooldown": "{seconds} s"
   }
 }

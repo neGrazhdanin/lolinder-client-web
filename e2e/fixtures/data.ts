@@ -8,6 +8,7 @@ import type {
   RankHistory,
   RankHistoryPoint,
   StaticDataBundle,
+  StaticDataDescriptions,
 } from '../../src/shared/api/generated/types.gen';
 
 export const VERSION = '16.21.1';
@@ -143,7 +144,7 @@ export function staticBundle(locale: 'en' | 'ru'): StaticDataBundle {
       id: Number(id),
       name,
       plaintext: '',
-      gold: 0,
+      gold: Number(id) === 3089 ? 3600 : 0,
       image: `${id}.png`,
       tags: itemTags[Number(id)] ?? [],
       from: [],
@@ -197,6 +198,20 @@ const lineup = [
   { gameName: 'Assam', championId: 222 },
   { gameName: 'Hojicha', championId: 412 },
 ];
+
+export function staticDescriptions(locale: 'en' | 'ru'): StaticDataDescriptions {
+  const power = locale === 'ru' ? 'силы умений' : 'Ability Power';
+  return {
+    items: [
+      {
+        id: 3089,
+        description: `<mainText><stats><attention>130</attention> ${power}</stats><br><br><passive>Magical Opus</passive><br>Increases your total <scaleAP>Ability Power by 30%</scaleAP>.</mainText>`,
+      },
+    ],
+    runes: [{ id: 8112, description: 'Hitting a champion with <b>3</b> separate attacks.' }],
+    summonerSpells: [{ id: 4, description: 'Teleports a short distance.', cooldownSec: 300 }],
+  };
+}
 
 export function historyMatch(
   index: number,

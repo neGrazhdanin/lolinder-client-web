@@ -4,6 +4,7 @@ import { computed, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ChampionIcon from '@/components/ChampionIcon.vue';
 import GameIcon from '@/components/GameIcon.vue';
+import GameTooltip from '@/components/GameTooltip.vue';
 import type { MatchHistoryItem, MatchHistoryParticipant } from '@/shared/api';
 import { isoDuration, useFormat } from '@/shared/i18n/format';
 import { cn } from '@/shared/lib/utils';
@@ -146,37 +147,66 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
           <span class="sr-only">{{ t('player.level', { level: match.champLevel }) }}</span>
         </span>
       </span>
-      <ul class="flex flex-col gap-0.5" :aria-label="t('player.matches.spells')">
+      <ul class="relative z-10 flex flex-col gap-0.5" :aria-label="t('player.matches.spells')">
         <li v-for="(spell, index) in spells" :key="index">
-          <GameIcon
-            :src="spell.entry?.iconUrl"
-            :label="spell.entry?.name ?? t('player.matches.unknownSpell', { id: spell.id })"
-            :pending="!lookup"
-            class="size-5 rounded-[4px]"
-          />
+          <GameTooltip
+            :id="spell.id"
+            kind="summonerSpells"
+            :name="spell.entry?.name ?? t('player.matches.unknownSpell', { id: spell.id })"
+            :focusable="false"
+          >
+            <GameIcon
+              :native-title="false"
+              :src="spell.entry?.iconUrl"
+              :label="spell.entry?.name ?? t('player.matches.unknownSpell', { id: spell.id })"
+              :pending="!lookup"
+              class="size-5 rounded-[4px]"
+            />
+          </GameTooltip>
         </li>
       </ul>
-      <ul class="flex flex-col items-center gap-0.5" :aria-label="t('player.matches.runes')">
+      <ul
+        class="relative z-10 flex flex-col items-center gap-0.5"
+        :aria-label="t('player.matches.runes')"
+      >
         <li v-if="keystone">
-          <GameIcon
-            :src="keystone.entry?.iconUrl"
-            :label="keystone.entry?.name ?? t('player.matches.unknownRune', { id: keystone.id })"
-            :pending="!lookup"
-            class="size-5 rounded-full bg-foreground/85 dark:bg-muted"
-          />
+          <GameTooltip
+            :id="keystone.id"
+            kind="runes"
+            :name="keystone.entry?.name ?? t('player.matches.unknownRune', { id: keystone.id })"
+            :focusable="false"
+          >
+            <GameIcon
+              :native-title="false"
+              :src="keystone.entry?.iconUrl"
+              :label="keystone.entry?.name ?? t('player.matches.unknownRune', { id: keystone.id })"
+              :pending="!lookup"
+              class="size-5 rounded-full bg-foreground/85 dark:bg-muted"
+            />
+          </GameTooltip>
         </li>
         <li
           v-if="secondaryTree"
           class="grid size-5 place-items-center rounded-full bg-foreground/85 dark:bg-transparent"
         >
-          <GameIcon
-            :src="secondaryTree.entry?.iconUrl"
-            :label="
+          <GameTooltip
+            :id="secondaryTree.id"
+            :name="
               secondaryTree.entry?.name ?? t('player.matches.unknownRune', { id: secondaryTree.id })
             "
-            :pending="!lookup"
-            class="size-3.5 rounded-full bg-transparent"
-          />
+            :focusable="false"
+          >
+            <GameIcon
+              :native-title="false"
+              :src="secondaryTree.entry?.iconUrl"
+              :label="
+                secondaryTree.entry?.name ??
+                t('player.matches.unknownRune', { id: secondaryTree.id })
+              "
+              :pending="!lookup"
+              class="size-3.5 rounded-full bg-transparent"
+            />
+          </GameTooltip>
         </li>
       </ul>
     </div>
@@ -221,7 +251,7 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
       class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5 [grid-area:bottom] @xl:contents"
     >
       <ul
-        class="flex items-center gap-0.5 @xl:[grid-area:build]"
+        class="relative z-10 flex items-center gap-0.5 @xl:[grid-area:build]"
         :aria-label="t('player.matches.items')"
       >
         <li
@@ -230,13 +260,21 @@ const marker = { win: 'bg-win', loss: 'bg-loss', remake: 'bg-muted-foreground/40
           :class="item.slot === 6 && 'ml-1.5'"
           :aria-hidden="item.id === 0 || undefined"
         >
-          <GameIcon
+          <GameTooltip
             v-if="item.id !== 0"
-            :src="item.entry?.iconUrl"
-            :label="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
-            :pending="!lookup"
-            :class="cn('size-6 rounded-[5px] @xl:size-7', item.slot === 6 && 'rounded-full')"
-          />
+            :id="item.id"
+            kind="items"
+            :name="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
+            :focusable="false"
+          >
+            <GameIcon
+              :native-title="false"
+              :src="item.entry?.iconUrl"
+              :label="item.entry?.name ?? t('player.matches.unknownItem', { id: item.id })"
+              :pending="!lookup"
+              :class="cn('size-6 rounded-[5px] @xl:size-7', item.slot === 6 && 'rounded-full')"
+            />
+          </GameTooltip>
           <span
             v-else
             :class="[

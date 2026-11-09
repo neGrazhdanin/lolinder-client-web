@@ -361,5 +361,9 @@
     "MATCH_NOT_FOUND": "Матч не найден",
     "TIMELINE_UNAVAILABLE": "Ход матча больше недоступен",
     "SERVICE_UNAVAILABLE": "Сервис временно недоступен, попробуйте через минуту"
+  },
+  "tooltip": {
+    "cost": "Стоимость",
+    "cooldown": "{seconds} сек."
   }
 }
