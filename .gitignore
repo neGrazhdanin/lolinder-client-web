@@ -43,3 +43,7 @@ playwright-report/
 
 .env
 .playwright-mcp/
+
+# Claude Code personal files
+.claude/settings.local.json
+CLAUDE.local.md
