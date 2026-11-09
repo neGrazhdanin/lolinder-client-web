@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ArrowLeftIcon, MessageSquareIcon } from '@lucide/vue';
-import { computed, useId } from 'vue';
+import { computed, ref, useId, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import StatePanel from '@/components/StatePanel.vue';
 import type { Match } from '@/shared/api';
@@ -19,6 +19,13 @@ const arena = computed(() => isArena(props.match));
 const sides = computed(() => matchSides(props.match));
 const viewed = computed(() => viewedParticipant(props.match, props.viewedPuuid));
 // Arena duos fight different opponents each round, so bars across all sixteen compare little.
+const expanded = ref<number[]>([]);
+watch(
+  () => [props.match.matchId, viewed.value?.participantId],
+  () => (expanded.value = viewed.value ? [viewed.value.participantId] : []),
+  { immediate: true },
+);
+
 const damageScale = computed(() => (arena.value ? null : maxDamage(props.match)));
 
 const back = computed(() => {
@@ -50,6 +57,8 @@ const back = computed(() => {
       <MatchSideTable
         v-for="(side, index) in sides"
         :key="side.id"
+        v-model:expanded="expanded"
+        :match-id="match.matchId"
         :side="side"
         :platform="match.platform"
         :duration-sec="match.durationSec"
@@ -60,7 +69,7 @@ const back = computed(() => {
       />
     </section>
 
-    <MatchTimeline :match="match" :sides="sides" :arena="arena" :viewed-puuid="viewed?.puuid" />
+    <MatchTimeline v-if="!arena" :match="match" />
 
     <StatePanel
       :title="t('match.comments.title')"

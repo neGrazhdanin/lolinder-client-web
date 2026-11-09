@@ -69,6 +69,7 @@ describe('createStaticLookup', () => {
       'https://ddragon.leagueoflegends.com/cdn/img/perk-images/Styles/7200_Domination.png',
     );
     expect(lookup.rune(8112)?.name).toBe('Казнь электричеством');
+    expect(lookup.runeTree(8100)?.slots).toEqual([[lookup.rune(8112)]]);
   });
 
   it('returns undefined for IDs from a newer patch', () => {
